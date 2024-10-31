@@ -3,3 +3,4 @@
 
 
 ![b24eb6dbda25519f45cae644257f4f60be7c1bf3](https://github.com/user-attachments/assets/d6c9fb18-0a04-4ea9-9f3f-62f8a5d63da4)
+![웹페이지 구성](./mock-up/web_ver1.PNG)
