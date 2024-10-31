@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Win Probability Prediction</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .upload-section, .prediction-section, .analysis-section {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+        }
+        .upload-section {
+            grid-column: span 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .prediction-section {
+            grid-column: span 2;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .analysis-section {
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3, h1 {
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            border: 2px dashed #007bff;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+        .upload-box input[type="file"] {
+            display: none;
+        }
+        .upload-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .input-form {
+            margin-top: 20px;
+            display: grid;
+            gap: 10px;
+        }
+        .input-form label {
+            font-weight: 700;
+        }
+        .input-form select, .input-form input {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        #predict-btn {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #predict-btn:hover {
+            background-color: #0056b3;
+        }
+        .win-probability {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-top: 20px;
+        }
+        .expression-analysis {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .expression-analysis img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .pie-chart {
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="upload-section">
+            <h2>Upload Photo</h2>
+            <div class="upload-box">
+                <input type="file" id="file-upload" accept=".png, .jpg, .jpeg">
+                <label for="file-upload">Drop files here<br>Supported formats: PNG, JPG<br>OR<br><a href="#">Browse files</a></label>
+            </div>
+            <form class="input-form">
+                <label for="role">누구인가요?</label>
+                <select id="role">
+                    <option value="fan">팬</option>
+                    <option value="player">선수</option>
+                    <option value="coach">코치</option>
+                    <option value="unknown">몰라요</option>
+                </select>
+                
+                <label for="sport">종목</label>
+                <select id="sport">
+                    <option value="baseball">야구</option>
+                    <option value="soccer">축구</option>
+                    <option value="basketball">농구</option>
+                    <option value="unknown">몰라요</option>
+                </select>
+                
+                <label for="inning">경기 진행</label>
+                <select id="inning">
+                    <option value="6_top">6회 말</option>
+                    <option value="6_bottom">6회 초</option>
+                    <option value="unknown">몰라요</option>
+                </select>
+                
+                <label for="our-score">현재 스코어 우리팀</label>
+                <input type="number" id="our-score" min="0" value="2">
+                
+                <label for="opponent-score">상대팀</label>
+                <input type="number" id="opponent-score" min="0" value="8">
+                
+                <button type="button" id="predict-btn">Predict</button>
+            </form>
+        </div>
+        <div class="prediction-section">
+            <h1>Your Team's Win Probability is...</h1>
+            <div class="win-probability">
+                <span>18%</span>
+            </div>
+        </div>
+        <div class="analysis-section">
+            <h3>표정분석</h3>
+            <div class="expression-analysis">
+                <img src="user-photo.jpg" alt="User Photo">
+                <div class="pie-chart">
+                    <canvas id="emotion-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
