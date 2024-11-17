@@ -3,5 +3,8 @@
 [노션](https://www.notion.so/PJT-B-11b943c01a2e80f6ade6db84130922d3)
 
 
+전 디자인이 너무 싫어요 
+나머진 승빈이가 알아서 해주겠지~ 난 몰랑
+
 ![b24eb6dbda25519f45cae644257f4f60be7c1bf3](https://github.com/user-attachments/assets/d6c9fb18-0a04-4ea9-9f3f-62f8a5d63da4)
 ![웹페이지 구성](./mock-up/web_ver1.PNG)
