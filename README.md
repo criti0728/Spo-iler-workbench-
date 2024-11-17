@@ -6,5 +6,7 @@
 전 디자인이 너무 싫어요 
 나머진 승빈이가 알아서 해주겠지~ 난 몰랑
 
-![b24eb6dbda25519f45cae644257f4f60be7c1bf3](https://github.com/user-attachments/assets/d6c9fb18-0a04-4ea9-9f3f-62f8a5d63da4)
+![iamfire](https://github.com/user-attachments/assets/157ab8c1-4cc6-452f-8211-945e3c293c05)
+
+
 ![웹페이지 구성](./mock-up/web_ver1.PNG)
