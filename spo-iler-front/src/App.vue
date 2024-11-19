@@ -43,7 +43,7 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" @click.prevent="logOut">
+          <a id="logout" class="nav-link" @click.prevent="logOut">
             <font-awesome-icon icon="sign-out-alt" /> LogOut
           </a>
         </li>
@@ -89,5 +89,9 @@ export default {
 <style scoped>
 .logo {
   height: 3rem;
+}
+
+#logout {
+  cursor: pointer;
 }
 </style>
