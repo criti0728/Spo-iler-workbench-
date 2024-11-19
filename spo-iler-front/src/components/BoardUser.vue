@@ -105,7 +105,7 @@
     <canvas ref="canvas" style="display: none;"></canvas>
   </div>
 </template>
-
+ 
 <script>
 import * as faceapi from "face-api.js"; // face-api.js 가져오기
 import UserService from "../services/user.service";
