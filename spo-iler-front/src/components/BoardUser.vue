@@ -1,61 +1,106 @@
 <template>
   <div class="container">
     <!-- 상단 콘텐츠 표시 -->
-    <header class="jumbotron">
+    <!-- <header class="jumbotron">
       <h3>{{ content }}</h3>
-    </header>
+    </header> -->
 
-    <!-- 선수/감독 선택 -->
-    <div>
-      <label for="role">Select Role:</label>
-      <select v-model="role" id="role">
-        <option value="player">Player</option>
-        <option value="coach">Coach</option>
-      </select>
+    <!-- 왼쪽 사이드바 -->
+    <div class="left-side">
+      <!-- 업로드 섹션 -->
+      <div class="upload-section">
+        <!-- 사진 업로드 -->
+        <div class="upload-box"
+        @dragover.prevent="handleDragOver"
+        @dragleave.prevent="handleDragLeave"
+        @drop.prevent="handleDrop"
+        >
+          <img src="../assets/upload-icon.png" alt="">
+          <p v-if="!isDragging">Drop files here</p>
+          <p v-if="isDragging" class="dragging-text">Release to Upload</p>
+          <p>OR</p>
+          <p class="click-upload" @click.prevent="uploadByClick">Click here</p>
+          <p>ONLY IMAGE files available</p>
+          <input type="file" @change="handleImageUpload" accept="image/*" hidden ref="fileInput"/>
+        </div>
+
+        <!-- 업로드 이미지 미리보기 -->
+        <div v-show="showInUploadSection">
+          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+        </div>
+
+        <!-- 선수/감독 선택 -->
+        <div>
+          <label for="role">Select Role:</label>
+          <select v-model="role" id="role">
+            <option value="player">Player</option>
+            <option value="coach">Coach</option>
+          </select>
+        </div>
+
+        <!-- 경기 진행 시간 선택 -->
+        <div>
+          <label for="gameTime">Select Game Time:</label>
+          <input type="number" v-model="gameTime" id="gameTime" min="0" max="100" /> % of Game
+        </div>
+
+        <!-- 현재 스코어 선택 -->
+        <div>
+          <label for="score">Enter Current Score (Your Team vs Opponent):</label>
+          <input type="number" v-model="score" id="score" /> : <input type="number" v-model="opponentScore" id="opponentScore" />
+        </div>
+
+        <!-- Run 버튼 -->
+        <div>
+          <button @click.prevent="runAnalyze">Analyze</button>
+        </div>
+        
+
+        <!-- 사진 업로드 섹션 ->로컬스토리지 관련으로 문제 생길 시 복구하기
+        <div>            
+          <h4>Upload a photo to detect emotions:</h4>
+          <input type="file" @change="handleImageUpload" accept="image/*" />
+        </div> -->
+
+        <!-- 업로드된 이미지 미리보기 ->로컬스토리지 관련으로 문제 생길 시 복구하기
+        <div v-if="imageUrl">
+          <h4>Uploaded Image:</h4>
+          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%; height: auto;" />
+        </div> -->
+      </div>
     </div>
 
-    <!-- 경기 진행 시간 선택 -->
-    <div>
-      <label for="gameTime">Select Game Time:</label>
-      <input type="number" v-model="gameTime" id="gameTime" min="0" max="100" /> % of Game
+    <!-- 메인 섹션 -->
+    <div class="main">
+      메인 섹션
+      <!-- 결과 섹션 -->
+      <div class="result-section">
+        <!-- 이미지 미리보기 -->
+        <div v-show="showInMainSection">
+          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+        </div>
+        <!-- 예측된 승률 표시 -->
+        <div v-if="winProbability !== null">
+          <h4>Estimated Winning Probability: {{ winProbability.toFixed(2) }}%</h4>
+        </div>
+      </div>
+
+      <!-- 분석 섹션 -->
+      <div class="analyze-section">
+        <!-- 감정 분석 결과 표시 -->
+        <div v-if="emotion">
+          <h4>Detected Emotion: {{ emotion }}</h4>
+        </div>
+      </div>
     </div>
 
-    <!-- 현재 스코어 선택 -->
-    <div>
-      <label for="score">Enter Current Score (Your Team vs Opponent):</label>
-      <input type="number" v-model="score" id="score" /> : <input type="number" v-model="opponentScore" id="opponentScore" />
+    <div class="right-side">
+      <!-- 히스토리 섹션 -->
+      <div class="history-section">
+        히스토리 섹션
+      </div>
     </div>
-
-    <!-- 사진 업로드 섹션 ->로컬스토리지 관련으로 문제 생길 시 복구하기
-    <div>            
-      <h4>Upload a photo to detect emotions:</h4>
-      <input type="file" @change="handleImageUpload" accept="image/*" />
-    </div> -->
-
-    <!-- 업로드된 이미지 미리보기 ->로컬스토리지 관련으로 문제 생길 시 복구하기
-    <div v-if="imageUrl">
-      <h4>Uploaded Image:</h4>
-      <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%; height: auto;" />
-    </div> -->
-
-    <!-- 감정 분석 결과 표시 -->
-    <div v-if="emotion">
-      <h4>Detected Emotion: {{ emotion }}</h4>
-    </div>
-
-    <!-- 예측된 승률 표시 -->
-    <div v-if="winProbability !== null">
-      <h4>Estimated Winning Probability: {{ winProbability.toFixed(2) }}%</h4>
-    </div>
-    <!--로컬스토리지로 결과값과 이미지 이동-->
-    <div>
-    <input type="file" @change="handleImageUpload" accept="image/*" />
-    <div v-if="imageUrl">
-      <h4>Uploaded Image:</h4>
-      <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
-    </div>
-    </div>
-
+    
     <!-- 숨겨진 캔버스 (face-api.js에서 필요) -->
     <canvas ref="canvas" style="display: none;"></canvas>
   </div>
@@ -78,7 +123,11 @@ export default {
       gameTime: 50, // 경기 진행 시간 (0~100%)
       score: 0, // 현재 스코어 (팀 점수)
       opponentScore: 0, // 상대팀 점수
-      imageUrl: "", // 이미지 미리보기 URL
+      imageUrl: null, // 이미지 미리보기 URL
+      isDragging: false, // 드래그 상태를 추적
+      imageFile: null,
+      showInUploadSection: false,
+      showInMainSection: false,
     };
   },
   mounted() {
@@ -101,6 +150,46 @@ export default {
     this.loadModels();
   },
   methods: {
+    // 이미지 드래그 앤 드롭을 위한 함수 3개
+    handleDragOver() {
+      this.isDragging = true;
+    },
+    handleDragLeave() {
+      this.isDragging = false;
+    },
+    handleDrop(event) {
+      this.isDragging = false;
+      const file = event.dataTransfer.files[0];
+      if (file) {
+        this.uploadFile(event);
+        this.handleImageUpload(event);
+      }
+    },
+    // handleDrop(event) {
+    //   this.isDragging = false;
+    //   const file = event.dataTransfer.files[0];
+    //   if (file) {
+    //     this.uploadFile(file);
+    //     this.handleImageUpload(file);
+    //   }
+    // },
+    // 클릭으로 파일 업로드
+    uploadByClick() {
+      this.$refs.fileInput.click();
+    },
+
+    // 이미지 업로드
+    uploadFile(event) {
+      const file = event.dataTransfer.files[0];
+      if (file && file.type.startsWith("image/")) {
+        this.imageUrl = URL.createObjectURL(file);
+        this.showInUploadSection = true;
+        this.showInMainSection = false;
+      } else {
+        alert("Only image files are allowed!");
+      }
+    },
+
     // face-api.js 모델 로드 메서드
     async loadModels() {
       try {
@@ -115,14 +204,22 @@ export default {
 
     // 이미지 업로드 처리
     async handleImageUpload(event) {
-      const file = event.target.files[0];
+      const file = event.dataTransfer.files[0];
+
       if (!file) {
         this.emotion = "No file selected.";
         return;
       }
-
       // 이미지 URL로 미리보기 제공
       this.imageUrl = URL.createObjectURL(file);
+
+      // 이미지 임시 저장
+      this.imageFile = file;
+    },
+
+    // 업로드된 이미지 분석 메서드
+    async runAnalyze() {
+      const file = this.imageFile;
 
       // 이미지 로드
       const image = await this.loadImage(file);
@@ -136,6 +233,7 @@ export default {
       faceapi.matchDimensions(canvas, image);  // 캔버스를 이미지 크기와 맞춤
 
       const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.5 });
+
 
       // 얼굴 감지 및 감정 분석
       const detections = await faceapi.detectAllFaces(image, options).withFaceExpressions();
@@ -180,7 +278,12 @@ export default {
       } catch (error) {
         console.error("Failed to process the image", error);
       }
+      // 메인 섹션에 이미지 미리보기 표시
+      this.showInMainSection = true;
+      // 업로드 섹션에서 미리보기 제거
+      this.showInUploadSection = false;
     },
+
 
     // 파일에서 이미지를 로드하는 메서드
     loadImage(file) {
@@ -237,8 +340,47 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+/* 임시 스타일 */
+.upload-section {
+  background-color: aquamarine;
+}
+img {
+  width: 100px;
+}
+.main {
+  background-color: bisque;
+}
+.analyze-section {
+  background-color: skyblue;
+}
+.result-section {
+  background-color: pink;
+}
+.history-section {
+  background-color: yellow;
+}
+
+
+/* 찐 스타일 */
 .container {
+  display: flex;
+}
+
+.upload-box {
+  border: 2px dashed #a5a5a5;
+  border-radius: 10px;
+  padding: 40px;
+  text-align: center;
+  background-color: #f8f9fa;
+}
+
+.click-upload {
+  cursor: pointer;
+}
+
+
+/* .container {
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
@@ -262,5 +404,5 @@ h4 {
 
 select, input[type="number"] {
   margin: 1rem 0;
-}
+} */
 </style>
