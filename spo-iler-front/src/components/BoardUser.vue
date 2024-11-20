@@ -10,43 +10,42 @@
         @dragleave.prevent="handleDragLeave"
         @drop.prevent="handleDrop"
         >
-          <img src="../assets/upload-icon.png" alt="">
-          <p v-if="!isDragging">Drop files here</p>
+          <img id="upload-icon" src="../assets/upload-icon.png" alt="">
+          <span v-if="!isDragging" id="dropFilesHere">Drop files here</span>
+          <span v-if="!isDragging">OR</span>
+          <p v-if="!isDragging" class="click-upload" @click.prevent="uploadByClick">Click here</p>
           <p v-if="isDragging" class="dragging-text">Release to Upload</p>
-          <p>OR</p>
-          <p class="click-upload" @click.prevent="uploadByClick">Click here</p>
-          <p>ONLY IMAGE files available</p>
+          <span>ONLY IMAGE files available</span>
           <input type="file" @change="handleImageUpload" accept="image/*" hidden ref="fileInput"/>
         </div>
 
         <!-- 업로드 이미지 미리보기 -->
-        <div v-show="showInUploadSection">
-          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+        <div class="left-side-image-box">
+          <div v-show="showInUploadSection">
+            <img class="left-side-image" :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+          </div>
+          <p v-show="!showInUploadSection">The image will be displayed here.</p>
         </div>
 
-        <!-- 선수/감독 선택 -->
-        <div>
-          <label for="role">Select Role:</label>
+        <!-- 옵션 선택 영역 -->
+        <div class="option-box">
+          <!-- 선수/감독 선택 -->
+          <label for="role">Role</label>
           <select v-model="role" id="role">
             <option value="player">Player</option>
             <option value="coach">Coach</option>
           </select>
-        </div>
 
-        <!-- 경기 진행 시간 선택 -->
-        <div>
-          <label for="gameTime">Select Game Time:</label>
-          <input type="number" v-model="gameTime" id="gameTime" min="0" max="100" /> % of Game
-        </div>
-
-        <!-- 현재 스코어 선택 -->
-        <div>
-          <label for="score">Enter Current Score (Your Team vs Opponent):</label>
+          <!-- 경기 진행 시간 선택 -->
+          <label for="gameTime">Game Time(%)</label>
+          <input type="number" v-model="gameTime" id="gameTime" min="0" max="100" /> %
+          
+          <!-- 현재 스코어 선택 -->
+          <label for="score">Current Score</label>
+          <label for="score">My Team : Opponent</label>
           <input type="number" v-model="score" id="score" /> : <input type="number" v-model="opponentScore" id="opponentScore" />
-        </div>
-
-        <!-- Run 버튼 -->
-        <div>
+          
+          <!-- Run 버튼 -->
           <button @click.prevent="runAnalyze">Analyze</button>
         </div>
         
@@ -289,6 +288,8 @@ export default {
       this.showInMainSection = true;
       // 업로드 섹션에서 미리보기 제거
       this.showInUploadSection = false;
+
+      this.logs = getFromLocalStorage("userLogs");
     },
 
     // 파이차트 생성 메서드
@@ -399,48 +400,5 @@ export default {
 </script>
 
 <style scoped>
-/* 임시 스타일 */
-.upload-section {
-  background-color: aquamarine;
-}
-img {
-  width: 100px;
-}
-.main {
-  background-color: bisque;
-}
-.analyze-section {
-  background-color: white;
-}
-.result-section {
-  background-color: pink;
-}
-.history-section {
-  background-color: yellow;
-}
-
-
-/* 찐 스타일 */
-.container {
-  display: flex;
-}
-
-.upload-box {
-  border: 2px dashed #a5a5a5;
-  border-radius: 10px;
-  padding: 40px;
-  text-align: center;
-  background-color: #f8f9fa;
-}
-
-.click-upload {
-  cursor: pointer;
-}
-
-#myPieChart {
-  /* background-color: black; */
-  /* border-color: black */
-  width: 300px;
-}
-
+@import "../styles/BoardUser.css";
 </style>

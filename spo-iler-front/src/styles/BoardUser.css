@@ -1,0 +1,105 @@
+/* 임시 스타일 */
+img {
+  /* width: 100px; */
+}
+.main {
+  background-color: bisque;
+}
+.analyze-section {
+  background-color: white;
+}
+.result-section {
+  background-color: pink;
+}
+.history-section {
+  background-color: yellow;
+}
+
+
+/* 찐 스타일 */
+.container {
+  display: flex;
+}
+
+/* Left Side============================================ */
+.left-side {
+  width: 30%;
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.upload-box {
+  border: 2px dashed #a5a5a5;
+  border-radius: 10px;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  color: gray;
+}
+
+.upload-box > span {
+  display: block;
+}
+
+#upload-icon {
+  width: 50%;
+}
+
+#dropFilesHere {
+  color: black;
+  font-weight: 600;
+}
+
+.click-upload {
+  cursor: pointer;
+  color: blue;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.left-side-image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: gray;
+    aspect-ratio: 4/3;
+}
+
+.option-box label {
+    display: block;
+    margin-bottom: 0;
+}
+
+.option-box input, .option-box select {
+    margin-bottom: 1rem;
+}
+
+#role {
+    width: 100%;
+}
+
+#gameTime {
+    width: 90%;
+}
+
+#score, #opponentScore {
+    width: 45%;
+}
+
+/* Main Section============================================ */
+.main {
+  width: 50%;
+}
+
+
+
+#myPieChart {
+  width: 300px;
+}
+
+/* Right Side============================================ */
+.right-side {
+    width: 20%;
+}
