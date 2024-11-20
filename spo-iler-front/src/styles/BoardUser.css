@@ -1,29 +1,14 @@
-/* 임시 스타일 */
-img {
-  /* width: 100px; */
-}
-.main {
-  background-color: bisque;
-}
-.analyze-section {
-  background-color: white;
-}
-.result-section {
-  background-color: pink;
-}
-.history-section {
-  background-color: yellow;
-}
-
-
-/* 찐 스타일 */
-.container {
+.screen {
   display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 /* Left Side============================================ */
 .left-side {
-  width: 30%;
+  width: 25%;
   border: 1px solid;
   border-radius: 10px;
   padding: 1rem;
@@ -43,7 +28,7 @@ img {
 }
 
 #upload-icon {
-  width: 50%;
+  width: 20%;
 }
 
 #dropFilesHere {
@@ -93,7 +78,41 @@ img {
   width: 50%;
 }
 
+.result-section {
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: gray;
+  aspect-ratio: 4;
+}
 
+.analyze-section {
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.main-section-image-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: gray;
+  aspect-ratio: 4/3;
+}
+
+.analysis-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: gray;
+  aspect-ratio: 4/3;
+}
 
 #myPieChart {
   width: 300px;
@@ -101,5 +120,8 @@ img {
 
 /* Right Side============================================ */
 .right-side {
-    width: 20%;
+  width: 15%;
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 1rem;
 }
