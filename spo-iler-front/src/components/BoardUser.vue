@@ -1,10 +1,5 @@
 <template>
   <div class="container">
-    <!-- 상단 콘텐츠 표시 -->
-    <!-- <header class="jumbotron">
-      <h3>{{ content }}</h3>
-    </header> -->
-
     <!-- 왼쪽 사이드바 -->
     <div class="left-side">
       <!-- 업로드 섹션 -->
@@ -161,33 +156,13 @@ export default {
       this.isDragging = false;
       const file = event.dataTransfer.files[0];
       if (file) {
-        this.uploadFile(event);
         this.handleImageUpload(event);
       }
     },
-    // handleDrop(event) {
-    //   this.isDragging = false;
-    //   const file = event.dataTransfer.files[0];
-    //   if (file) {
-    //     this.uploadFile(file);
-    //     this.handleImageUpload(file);
-    //   }
-    // },
+    
     // 클릭으로 파일 업로드
     uploadByClick() {
       this.$refs.fileInput.click();
-    },
-
-    // 이미지 업로드
-    uploadFile(event) {
-      const file = event.dataTransfer.files[0];
-      if (file && file.type.startsWith("image/")) {
-        this.imageUrl = URL.createObjectURL(file);
-        this.showInUploadSection = true;
-        this.showInMainSection = false;
-      } else {
-        alert("Only image files are allowed!");
-      }
     },
 
     // face-api.js 모델 로드 메서드
@@ -204,14 +179,29 @@ export default {
 
     // 이미지 업로드 처리
     async handleImageUpload(event) {
-      const file = event.dataTransfer.files[0];
+      let file = null;
+      try {
+        file = event.dataTransfer.files[0]; // Drag & Drop 방식
+      } catch (error) {
+        file = event.target.files[0]; // 클릭 방식
+      }
 
+      // 이미지 파일이 아닌 파일을 업로드 했을 때
+      if (!file || !file.type.startsWith("image/")) {
+        alert("Only image files are allowed!");
+      }
+
+      // 파일을 업로드하지 않았을 때
       if (!file) {
         this.emotion = "No file selected.";
         return;
       }
       // 이미지 URL로 미리보기 제공
       this.imageUrl = URL.createObjectURL(file);
+
+      // 미리보기 visibility 변경
+      this.showInUploadSection = true;
+      this.showInMainSection = false;
 
       // 이미지 임시 저장
       this.imageFile = file;
@@ -379,30 +369,4 @@ img {
   cursor: pointer;
 }
 
-
-/* .container {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.jumbotron {
-  background-color: #f8f9fa;
-  padding: 2rem;
-  margin-bottom: 1rem;
-  border-radius: 0.5rem;
-}
-
-input[type="file"] {
-  margin: 1rem 0;
-}
-
-h4 {
-  margin-top: 1rem;
-  color: #333;
-}
-
-select, input[type="number"] {
-  margin: 1rem 0;
-} */
 </style>
