@@ -81,6 +81,7 @@ export default {
     logOut() {
       this.$store.dispatch('auth/logout');
       this.$router.push('/login');
+      window.localStorage.removeItem('userLogs');
     }
   }
 };
