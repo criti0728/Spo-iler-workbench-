@@ -95,6 +95,7 @@
       <!-- 히스토리 섹션 -->
       <div class="history-section">
         히스토리 섹션
+        <ActivityLogs :logs="logs" />
       </div>
     </div>
     
@@ -107,11 +108,15 @@
 import * as faceapi from "face-api.js"; // face-api.js 가져오기
 import UserService from "../services/user.service";
 import { compressImage } from "../utils/imageProcessing";
-import { saveToLocalStorage } from "../utils/storage";
+import { saveToLocalStorage, getFromLocalStorage } from "../utils/storage";
+import ActivityLogs from "../components/ActivityLogs.vue";
 import { Chart } from 'chart.js';
 
 export default {
   name: "User",
+  components: {
+    ActivityLogs,
+  },
   data() {
     return {
       content: "", // 기본 텍스트 콘텐츠
@@ -127,6 +132,7 @@ export default {
       showInUploadSection: false,
       showInMainSection: false,
       pieChart: null,
+      logs: [],
     };
   },
   mounted() {
@@ -147,6 +153,7 @@ export default {
 
     // face-api.js 모델 로드
     this.loadModels();
+    this.logs = getFromLocalStorage("userLogs");
   },
   methods: {
     // 이미지 드래그 앤 드롭을 위한 함수 3개
