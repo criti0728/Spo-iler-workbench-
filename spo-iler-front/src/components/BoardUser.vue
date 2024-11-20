@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="screen">
     <!-- 왼쪽 사이드바 -->
     <div class="left-side">
       <!-- 업로드 섹션 -->
@@ -66,34 +66,39 @@
 
     <!-- 메인 섹션 -->
     <div class="main">
-      메인 섹션
       <!-- 결과 섹션 -->
       <div class="result-section">
         <!-- 예측된 승률 표시 -->
-        <div v-if="winProbability !== null">
+        <div v-show='showInMainSection' v-if="winProbability !== null">
           <h4>Estimated Winning Probability: {{ winProbability.toFixed(2) }}%</h4>
         </div>
+        <p v-show='!showInMainSection'>The predicted win rate will be displayed here.</p>
       </div>
 
       <!-- 분석 섹션 -->
       <div class="analyze-section">
         <!-- 이미지 미리보기 -->
-        <div v-show="showInMainSection">
-          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+        <div class="main-section-image-box">
+          <div v-show="showInMainSection">
+            <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+          </div>
+          <p v-show='!showInMainSection'>The image will be displayed here.</p>
         </div>
         <!-- 감정 분석 결과 표시 -->
-        <div v-if="emotion">
-          <h4>Detected Emotion: {{ emotion }}</h4>
+        <div class="analysis-box">
+          <div v-show='showInMainSection'>
+            <h4>{{ emotion }}</h4>
+            <!-- 파이차트 -->
+            <canvas id="myPieChart" width="400" height="400"></canvas>
+          </div>
+          <p v-show='!showInMainSection'>The analysis results will be displayed here.</p>
         </div>
-        <!-- 파이차트 -->
-        <canvas id="myPieChart" width="400" height="400"></canvas>
       </div>
     </div>
 
     <div class="right-side">
       <!-- 히스토리 섹션 -->
       <div class="history-section">
-        히스토리 섹션
         <ActivityLogs :logs="logs" />
       </div>
     </div>
