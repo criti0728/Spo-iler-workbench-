@@ -70,10 +70,6 @@
       메인 섹션
       <!-- 결과 섹션 -->
       <div class="result-section">
-        <!-- 이미지 미리보기 -->
-        <div v-show="showInMainSection">
-          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
-        </div>
         <!-- 예측된 승률 표시 -->
         <div v-if="winProbability !== null">
           <h4>Estimated Winning Probability: {{ winProbability.toFixed(2) }}%</h4>
@@ -82,10 +78,16 @@
 
       <!-- 분석 섹션 -->
       <div class="analyze-section">
+        <!-- 이미지 미리보기 -->
+        <div v-show="showInMainSection">
+          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+        </div>
         <!-- 감정 분석 결과 표시 -->
         <div v-if="emotion">
           <h4>Detected Emotion: {{ emotion }}</h4>
         </div>
+        <!-- 파이차트 -->
+        <canvas id="myPieChart" width="400" height="400"></canvas>
       </div>
     </div>
 
@@ -100,12 +102,13 @@
     <canvas ref="canvas" style="display: none;"></canvas>
   </div>
 </template>
- 
+
 <script>
 import * as faceapi from "face-api.js"; // face-api.js 가져오기
 import UserService from "../services/user.service";
 import { compressImage } from "../utils/imageProcessing";
 import { saveToLocalStorage } from "../utils/storage";
+import { Chart } from 'chart.js';
 
 export default {
   name: "User",
@@ -123,6 +126,7 @@ export default {
       imageFile: null,
       showInUploadSection: false,
       showInMainSection: false,
+      pieChart: null,
     };
   },
   mounted() {
@@ -245,6 +249,12 @@ export default {
             .join(", ");
 
           console.log("Top 3 emotions:", this.emotion); // 디버깅: 상위 3개 감정
+
+          // 파이차트 생성 메서드 호출
+          const labels = Object.keys(expressions);
+          const data = Object.values(expressions).map(value => value * 100);
+          this.createPieChart(labels, data);
+
         } else {
           this.emotion = "No emotions detected.";
         }
@@ -274,6 +284,57 @@ export default {
       this.showInUploadSection = false;
     },
 
+    // 파이차트 생성 메서드
+    createPieChart(labels, data) {
+      if (this.pieChart) {
+        this.pieChart.destroy(); // 이전 차트 제거
+      }
+
+      const ctx = document.getElementById("myPieChart").getContext("2d");
+      this.pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Emotion Analysis',
+            data: data,
+            backgroundColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderColor: [
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)'
+            ],
+            borderWidth: 3,
+            hoverBackgroundColor: 'rgba(0, 0, 0, 1)',
+            hoverBorderWidth: 0,
+            hoverBorderColor: 'rgba(255, 255, 255, 1)',
+          }]
+        },
+        // options: {
+        //   responsive: true,
+        //   plugins: {
+        //     legend: {
+        //       display: false,
+        //       position: 'left',
+        //     },
+        //     tooltip: {
+        //       enabled: true
+        //     }
+        //   }
+        // }
+      });
+    },
 
     // 파일에서 이미지를 로드하는 메서드
     loadImage(file) {
@@ -342,7 +403,7 @@ img {
   background-color: bisque;
 }
 .analyze-section {
-  background-color: skyblue;
+  background-color: white;
 }
 .result-section {
   background-color: pink;
@@ -367,6 +428,12 @@ img {
 
 .click-upload {
   cursor: pointer;
+}
+
+#myPieChart {
+  /* background-color: black; */
+  /* border-color: black */
+  width: 300px;
 }
 
 </style>
