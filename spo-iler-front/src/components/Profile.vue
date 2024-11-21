@@ -1,38 +1,75 @@
 <template>
-  <div class="container">
-    <header class="jumbotron">
-      <h3>
-        <strong>{{currentUser.username}}</strong> Profile
-      </h3>
-    </header>
-    <p>
-      <strong>Token:</strong>
-      {{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}
-    </p>
-    <p>
-      <strong>Id:</strong>
-      {{currentUser.id}}
-    </p>
-    <p>
-      <strong>Email:</strong>
-      {{currentUser.email}}
-    </p>
-    <strong>Authorities:</strong>
-    <ul>
-      <li v-for="role in currentUser.roles" :key="role">{{role}}</li>
-    </ul>
-    <ActivityLogs :logs="logs" />
+  <!-- 프로필 정보 -->
+  <div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-7">
+        <div class="card p-3 py-4">
+          <div class="text-center">
+            <img src="../assets/person-icon.png" width="100" class="rounded-circle">
+          </div>
+          <div class="text-center mt-3">
+            <span class="bg-secondary p-1 px-4 rounded text-white">{{ currentUser.roles[0].slice(5) }}</span>
+            <h3 class="mt-2 mb-0">{{currentUser.username}}</h3>
+            <div class="px-4 mt-1">
+              <span>{{currentUser.email}}</span>
+              <p class="fonts">{{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}</p>
+            </div>
+            <div class="buttons">
+              <button class="btn btn-outline-primary px-4">Start</button>
+              <button class="btn btn-primary px-4 ms-3">LogOut</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 분석 히스토리 -->
+  <div class="container px-4 py-5 mx-auto">
+    <!-- 테이블 헤더 -->
+    <div class="row d-flex justify-content-center">
+      <div class="col-5">
+        <h4 class="heading">Analysis History</h4>
+        <span>Reset upon logging out.</span>
+      </div>
+      <div class="col-7">
+        <div class="row text-right">
+          <div class="col-5">
+            <h6 class="mt-2">Estimated Win Probability</h6>
+          </div>
+          <div class="col-6">
+            <h6 class="mt-2">Date</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 테이블 행 -->
+    <div v-for="(log, index) in logs.slice().reverse()" :key="index" class="row d-flex justify-content-center border-top">
+      <div class="col-5">
+        <div class="row d-flex">
+          <div class="face">
+            <img v-if="log.imageUrl" :src="log.imageUrl" alt="Uploaded Image" style="max-width: 100px;" class="face-img">
+          </div>
+        </div>
+      </div>
+      <div class="my-auto col-7">
+        <div class="row text-right">
+          <div class="col-5">
+            <h6 class="mob-text">50%</h6>
+          </div>          
+          <div class="col-6">
+            <p class="mob-text">{{ formatTimestamp(log.timestamp) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { getFromLocalStorage } from "../utils/storage";
-import ActivityLogs from "../components/ActivityLogs.vue";
 
 export default {
-  components: {
-    ActivityLogs,
-  },
   data() {
     return {
       logs: [],
@@ -49,6 +86,93 @@ export default {
       this.$router.push('/login');
     }
     this.logs = getFromLocalStorage("userLogs");
-  }
+  },
+  methods: {
+    formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        const options = {
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        };
+        return date.toLocaleString('en-US', options);
+      },
+  },
 };
 </script>
+
+<style scoped>
+.border-top {
+  border-top: 1px solid #EEEEEE !important;
+  margin-top: 20px;
+  padding-top: 15px;
+}
+
+.card{
+  border:none;
+  cursor:pointer;
+}
+
+.card:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  border-width: 4px;
+  border-color: #E1BEE7;
+  border-style: solid;
+  border-radius: 8px;
+  /* transform:scale(1); */
+  /* transform: rotate(1); */
+  /* transition:all 0.5s; */
+  /* transform-origin: bottom */
+}
+
+.card:after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  border-width: 4px;
+  border-color: #8E24AA;
+  border-style: solid;
+  border-radius: 8px;
+  transform:scale(0);
+  transition:all 0.5s;
+  /* transform-origin: bottom */
+}
+
+.card:hover::after{
+  transform:scale(1);
+}
+
+.fonts{
+  font-size:10px;
+}
+
+.buttons button:nth-child(1){
+  border:1px solid #8E24AA !important;
+  color:#8E24AA;
+  height:40px;
+}
+
+.buttons button:nth-child(1):hover{
+  border:1px solid #8E24AA !important;
+  color:#fff;
+  height:40px;
+  background-color:#8E24AA;
+}
+
+.buttons button:nth-child(2){
+  border:1px solid #8E24AA !important;
+  background-color:#8E24AA;
+  color:#fff;
+  height:40px;
+}
+</style>

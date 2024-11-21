@@ -284,6 +284,7 @@ export default {
         // 로컬스토리지에 저장
         saveToLocalStorage("userLogs", {
           timestamp: new Date().toISOString(),
+          winProbability: this.winProbability.toFixed(2),
           imageUrl: this.imageUrl,
         });
       } catch (error) {

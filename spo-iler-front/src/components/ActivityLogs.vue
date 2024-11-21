@@ -4,6 +4,7 @@
       <p>Reset upon logging out.</p>
       <div v-for="(log, index) in logs.slice().reverse()" :key="index">
         <img v-if="log.imageUrl" :src="log.imageUrl" alt="Uploaded Image" style="max-width: 100px;" />
+        <p v-if="log.winProbability">Win Probability: {{ log.winProbability }}%</p>
         <p>{{ formatTimestamp(log.timestamp) }}</p>
       </div>
     </div>
