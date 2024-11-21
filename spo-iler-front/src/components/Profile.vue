@@ -24,6 +24,7 @@
   </div>
 </div>
 
+
   <!-- 분석 히스토리 -->
   <div class="container px-4 py-5 mx-auto">
     <!-- 테이블 헤더 -->
@@ -55,7 +56,9 @@
       <div class="my-auto col-7">
         <div class="row text-right">
           <div class="col-5">
-            <h6 class="mob-text">50%</h6>
+            <h6 class="mob-text">
+              <p v-if="log.winProbability">{{ log.winProbability }}%</p>
+            </h6>
           </div>          
           <div class="col-6">
             <p class="mob-text">{{ formatTimestamp(log.timestamp) }}</p>
