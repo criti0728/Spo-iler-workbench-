@@ -3,7 +3,7 @@
     <div class="card card-container">
       <img
         id="logo-img"
-        src="../assets/spo-iler_logo.png"
+        src="../assets/new-logo-bright.png"
         class="logo-img-card"
       />
       <span class="info-text-main">
@@ -159,13 +159,11 @@ label {
 }
 
 .logo-img-card {
-  width: 96px;
-  height: 96px;
+  height: 60px;
   margin: 0 auto 10px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
 }
 
 .error-feedback {
