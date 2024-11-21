@@ -15,14 +15,14 @@
               <p class="fonts">{{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}</p>
             </div>
             <div class="buttons">
-              <button class="btn btn-outline-primary px-4">Start</button>
-              <button class="btn btn-primary px-4 ms-3">LogOut</button>
-            </div>
+                <button class="btn btn-outline-primary px-4"><router-link to="/user" class="nav-link">Start</router-link></button>
+                <button class="btn btn-primary px-4 ms-3"><a id="logout" class="nav-link" @click.prevent="logOut">LogOut</a></button>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
   <!-- 분석 히스토리 -->
   <div class="container px-4 py-5 mx-auto">
@@ -98,6 +98,11 @@ export default {
           hour12: false,
         };
         return date.toLocaleString('en-US', options);
+      },
+      logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+      window.localStorage.removeItem('userLogs');
       },
   },
 };
@@ -182,5 +187,13 @@ export default {
   background-color:#fff;
   color:#000000;
   height:40px;
+}
+
+.nav-link {
+  color: inherit; /* Ensures the link inherits the button's text color */
+  text-decoration: none; /* Removes default underline from links */
+  top: 50%;
+  transform: translate(0, -50%);
+  position: relative;
 }
 </style>
