@@ -193,8 +193,8 @@ export default {
 }
 
 .nav-link {
-  color: inherit; /* Ensures the link inherits the button's text color */
-  text-decoration: none; /* Removes default underline from links */
+  color: inherit; 
+  text-decoration: none;
   top: 50%;
   transform: translate(0, -50%);
   position: relative;

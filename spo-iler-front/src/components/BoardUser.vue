@@ -68,12 +68,16 @@
     <div class="main">
       <!-- 결과 섹션 -->
       <div class="result-section">
-        <!-- 예측된 승률 표시 -->
-        <div v-show='showInMainSection' v-if="winProbability !== null">
-          <h4>Estimated Winning Probability: {{ winProbability.toFixed(2) }}%</h4>
+        <div v-if="showInMainSection && winProbability !== null">
+          <h4 :class="['win-probability', winProbability > 50 ? 'green' : 'red']">
+            Estimated Winning Probability: {{ winProbability.toFixed(2) }}%
+          </h4>
         </div>
-        <p v-show='!showInMainSection'>The predicted win rate will be displayed here.</p>
+        <p v-if="!showInMainSection">
+          The predicted win rate will be displayed here.
+        </p>
       </div>
+
 
       <!-- 분석 섹션 -->
       <div class="analyze-section">
@@ -163,12 +167,18 @@ export default {
     // 이미지 드래그 앤 드롭을 위한 함수 3개
     handleDragOver() {
       this.isDragging = true;
+      const uploadBox = document.querySelector(".upload-box");
+      uploadBox.classList.add("drag-active"); // 드래그 상태 클래스 추가
     },
     handleDragLeave() {
       this.isDragging = false;
+      const uploadBox = document.querySelector(".upload-box");
+      uploadBox.classList.remove("drag-active"); // 드래그 상태 클래스 제거
     },
     handleDrop(event) {
       this.isDragging = false;
+      const uploadBox = document.querySelector(".upload-box");
+      uploadBox.classList.remove("drag-active"); // 드래그 상태 클래스 제거
       const file = event.dataTransfer.files[0];
       if (file) {
         this.handleImageUpload(event);
