@@ -95,4 +95,8 @@ export default {
 #logout {
   cursor: pointer;
 }
+
+#app {
+  min-width: 1000px;
+}
 </style>
