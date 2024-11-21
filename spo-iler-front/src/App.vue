@@ -1,58 +1,63 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-lgiht bg-light">
-      <a href="/" class="navbar-brand">
-        <img class="logo" src="./assets/spo-iler_logo.png" alt="">
-        <span>Spo-iler</span>
-      </a>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link to="/home" class="nav-link">
-            <font-awesome-icon icon="home" /> Home
-          </router-link>
-        </li>
-        <li v-if="showAdminBoard" class="nav-item">
-          <router-link to="/admin" class="nav-link">Admin Board</router-link>
-        </li>
-        <li v-if="showModeratorBoard" class="nav-item">
-          <router-link to="/mod" class="nav-link">Moderator Board</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
-        </li>
-      </div>
-
-      <div v-if="!currentUser" class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <router-link to="/register" class="nav-link">
-            <font-awesome-icon icon="user-plus" /> Sign Up
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/login" class="nav-link">
-            <font-awesome-icon icon="sign-in-alt" /> Login
-          </router-link>
-        </li>
-      </div>
-
-      <div v-if="currentUser" class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <router-link to="/profile" class="nav-link">
-            <font-awesome-icon icon="user" />
-            {{ currentUser.username }}
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <a id="logout" class="nav-link" @click.prevent="logOut">
-            <font-awesome-icon icon="sign-out-alt" /> LogOut
-          </a>
-        </li>
+    <nav>
+      <div class="wrapper">
+        <a href="/">
+          <img class="logo" src="./assets/new-logo.png" alt="">
+        </a>
+        <!-- 왼쪽에 붙는 메뉴 -->
+        <div class="navbar-nav mr-auto">
+          <ul class="nav-links">
+            <li>
+              <router-link to="/home">Home</router-link>
+            </li>
+            <li v-if="showAdminBoard">
+              <router-link to="/admin">Admin Board</router-link>
+            </li>
+            <li v-if="showModeratorBoard">
+              <router-link to="/mod">Moderator Board</router-link>
+            </li>
+            <li>
+              <router-link v-if="currentUser" to="/user">User</router-link>
+            </li>
+          </ul>
+        </div>
+      
+        <!-- 오른쪽에 붙는 메뉴 -->
+        <!-- 로그인 했을 때 -->
+        <div v-if="currentUser" class="navbar-nav ml-auto">
+          <ul class="nav-links">
+            <li>
+              <router-link to="/profile">
+                <font-awesome-icon icon="user"/>
+                {{ currentUser.username }}
+              </router-link>
+            </li>
+            <li>
+              <a id="logout" @click.prevent="logOut">
+                <font-awesome-icon icon="sign-out-alt" /> LogOut
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- 로그인 안했을 때 -->
+        <div v-if="!currentUser" class="navbar-nav ml-auto">
+          <ul class="nav-links">
+            <li>
+              <router-link to="/register">
+                <font-awesome-icon icon="user-plus" /> Sign Up
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/login">
+                <font-awesome-icon icon="sign-in-alt" /> Login
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
-
-    <div>
-      <router-view />
-    </div>
+    <router-view />
   </div>
 </template>
 
@@ -88,15 +93,64 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
 .logo {
-  height: 3rem;
+  height: 3.5rem;
 }
 
 #logout {
   cursor: pointer;
+  color: #f2f2f2;
 }
 
 #app {
   min-width: 1000px;
+}
+
+nav{
+  background: #242526;
+}
+nav .wrapper{
+  position: relative;
+  max-width: 1300px;
+  padding: 0px 30px;
+  height: 70px;
+  line-height: 70px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+.wrapper .nav-links{
+  display: inline-flex;
+}
+.nav-links li{
+  list-style: none;
+}
+.nav-links li a{
+  color: #f2f2f2;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 9px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+.nav-links li a:hover{
+  background: #3A3B3C;
+}
+
+.body-text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  padding: 0 30px;
+}
+.body-text div{
+  font-size: 45px;
+  font-weight: 600;
 }
 </style>
