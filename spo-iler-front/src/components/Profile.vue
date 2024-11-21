@@ -15,14 +15,14 @@
               <p class="fonts">{{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}</p>
             </div>
             <div class="buttons">
-              <button class="btn btn-outline-primary px-4">Start</button>
-              <button class="btn btn-primary px-4 ms-3">LogOut</button>
-            </div>
+                <button class="btn btn-outline-primary px-4"><router-link to="/user" class="nav-link">Start</router-link></button>
+                <button class="btn btn-primary px-4 ms-3"><a id="logout" class="nav-link" @click.prevent="logOut">LogOut</a></button>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
   <!-- 분석 히스토리 -->
   <div class="container px-4 py-5 mx-auto">
@@ -99,6 +99,11 @@ export default {
         };
         return date.toLocaleString('en-US', options);
       },
+      logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+      window.localStorage.removeItem('userLogs');
+      },
   },
 };
 </script>
@@ -112,7 +117,7 @@ export default {
 
 .card{
   border:none;
-  cursor:pointer;
+  
 }
 
 .card:before{
@@ -123,13 +128,9 @@ export default {
   width:100%;
   height:100%;
   border-width: 4px;
-  border-color: #E1BEE7;
+  border-color: lightgray;
   border-style: solid;
   border-radius: 8px;
-  /* transform:scale(1); */
-  /* transform: rotate(1); */
-  /* transition:all 0.5s; */
-  /* transform-origin: bottom */
 }
 
 .card:after{
@@ -140,16 +141,16 @@ export default {
   width:100%;
   height:100%;
   border-width: 4px;
-  border-color: #8E24AA;
+  border-color: black;
   border-style: solid;
   border-radius: 8px;
-  transform:scale(0);
-  transition:all 0.5s;
-  /* transform-origin: bottom */
+  transform:scale(0, 0);
+  transition:all 0.3s;
+  transform-origin: top, left;
 }
 
 .card:hover::after{
-  transform:scale(1);
+  transform:scale(1, 1);
 }
 
 .fonts{
@@ -157,22 +158,42 @@ export default {
 }
 
 .buttons button:nth-child(1){
-  border:1px solid #8E24AA !important;
-  color:#8E24AA;
+  position: relative;
+  border:1px solid #3030ff !important;
+  color:#ffffff;
   height:40px;
+  background-color: #3030ff;
+  z-index: 1;
 }
 
 .buttons button:nth-child(1):hover{
-  border:1px solid #8E24AA !important;
+  border:1px solid #0000ff !important;
   color:#fff;
   height:40px;
-  background-color:#8E24AA;
+  background-color:#0000ff;
 }
 
 .buttons button:nth-child(2){
-  border:1px solid #8E24AA !important;
-  background-color:#8E24AA;
-  color:#fff;
+  position: relative;
+  border:1px solid #a0a0a0 !important;
+  background-color:#fff;
+  color:#000000;
   height:40px;
+  z-index: 1;
+}
+
+.buttons button:nth-child(2):hover{
+  border:1px solid #000000 !important;
+  background-color:#fff;
+  color:#000000;
+  height:40px;
+}
+
+.nav-link {
+  color: inherit; /* Ensures the link inherits the button's text color */
+  text-decoration: none; /* Removes default underline from links */
+  top: 50%;
+  transform: translate(0, -50%);
+  position: relative;
 }
 </style>
