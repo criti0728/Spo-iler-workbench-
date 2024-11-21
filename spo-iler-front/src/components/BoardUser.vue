@@ -362,45 +362,115 @@ export default {
 
     // 승률 계산 메서드
     calculateWinProbability() {
-      let probability = 50; // 기본 50%
+      let probability = 50; // 기본 승률 50%
 
-      // 감정 분석 반영 (긍정적인 감정 비율에 따른 승률 조정)
-      const positiveEmotionRatio = this.getPositiveEmotionRatio();
-      probability += positiveEmotionRatio * 30; // 감정 분석에 따라 최대 30% 증가
+      // 감정 분석 반영
+      const emotionRatios = this.getPositiveEmotionRatio();
+      console.log(emotionRatios.negative)
+      if (emotionRatios.negative > 0.8) {
+        probability -= emotionRatios.negative * 8;
+        console.log('probability (negative > 0.8) is :'+ probability);
+      } else if (emotionRatios.negative > 0.5) {
+        probability -= emotionRatios.negative * 5;
+        console.log('probability (negative > 0.5) is :'+ probability);
+      } else if (emotionRatios.positive >= 0.5) {
+        probability += emotionRatios.positive * 5;
+        console.log('probability (positive >= 0.5) is :'+ probability);
+      } else if (emotionRatios.positive > 0.8) {
+        probability += emotionRatios.positive * 8;
+        console.log('probability (positive > 0.8) is :'+ probability);
+      } else {
+        console.log('No condition met. Current probability is: ' + probability);
+      }
 
-      // 경기 진행 시간 반영 (100%까지 진행되면 승률이 그대로 유지)
-      probability += (this.gameTime / 100) * 10; // 경기 진행에 따라 승률 증가
+      
 
-      // 스코어 차이 반영 (자신의 점수가 높을수록 승률 증가)
+      // 0:0 점수 상황에서 부정적 감정
+      if (this.score === 0 && this.opponentScore === 0 && emotionRatios.negative > 0.5) {
+        probability -= 10; // 추가 패널티
+      }
+
+      // 경기 진행 시간 반영
+      if (this.gameTime <= 25&&emotionRatios.negative<0.5) {
+        // 초반 진행: 영향이 작음
+        probability += (this.gameTime / 25) * 10; // 최대 10% 상승
+      } else if (this.gameTime <= 75) {
+        // 중반 진행: 영향이 더 커짐
+        probability += 10 + Math.pow((this.gameTime - 25) / 50, 2) * 15; // 최대 추가 15% 상승
+      } else {
+        // 후반 진행: 승률 급격히 상승
+        probability += 25 + ((this.gameTime - 75) / 25) * 20; // 최대 추가 10% 상승
+      }
+      if (this.gameTime <= 25&&emotionRatios.negative>0.5) {
+        // 초반 진행: 영향이 작음
+        probability -= (this.gameTime / 25) * 10; // 최대 10% 상승
+      } else if (this.gameTime <= 75) {
+        // 중반 진행: 영향이 더 커짐
+        probability -= 10 + Math.pow((this.gameTime - 25) / 50, 2) * 15; // 최대 추가 15% 상승
+      } else {
+        // 후반 진행: 승률 급격히 낮아짐
+        probability -= 25 + ((this.gameTime - 75) / 25) * 20; // 최대 추가 10% 상승
+      }
+
+      // 점수 차이 반영
       const scoreDifference = this.score - this.opponentScore;
       if (scoreDifference > 0) {
-        probability += (scoreDifference / 30); // 점수 차이에 따라 승률 증가
+        probability += Math.min(60, Math.log(scoreDifference + 1) * 5); // 점수 차이 상승
+      } else if (scoreDifference < 0) {
+        probability -= Math.min(60, Math.log(Math.abs(scoreDifference) + 1) * 5); // 점수 차이 패널티
+      }
+      // 경기 진행 시간에 따른 스코어 영향 강화
+      let timeScoreImpact = 0;
+      if (this.gameTime <= 25) {
+        timeScoreImpact = (this.gameTime / 25) * Math.log(Math.abs(scoreDifference) + 1) * 2; // 초반
+      } else if (this.gameTime <= 75) {
+        timeScoreImpact = 2 + ((this.gameTime - 25) / 50) * Math.log(Math.abs(scoreDifference) + 1) * 5; // 중반
+      } else {
+        timeScoreImpact = 10 + ((this.gameTime - 75) / 25) * Math.log(Math.abs(scoreDifference) + 1) * 8; // 후반
       }
 
-      // 선수/감독 반영 (감독의 경우 좀 더 낮은 승률)
-      if (this.role === "coach") {
-        probability += 5; // 감독일 경우 5% 추가
+      // 점수 차이가 클수록 진행 시간의 영향 증가
+      if (scoreDifference > 0) {
+        probability += timeScoreImpact; // 점수 차이가 유리하면 승률 증가
+      } else if (scoreDifference < 0) {
+        probability -= timeScoreImpact; // 점수 차이가 불리하면 승률 감소
       }
 
-      // 승률은 0~100 사이로 제한
+
+      // 역할에 따른 승률 조정
+      const roleMultiplier = this.role === "coach" ? 0.95 : 1.05;
+      probability *= roleMultiplier;
+
+      // 무작위 요소 추가
+      const randomFactor = Math.random() * 1 - 0.5; // 랜덤 범위 [-0.5, 0.5]
+      probability += randomFactor * 2;
+
+      // 승률은 0~100%로 제한
       this.winProbability = Math.max(0, Math.min(probability, 100));
     },
 
     // 긍정적인 감정 비율을 계산하는 메서드
     getPositiveEmotionRatio() {
-      if (!this.emotion) return 0;
+    if (!this.emotion) return 0;
 
-      const emotionEntries = this.emotion.split(", ");
-      let positiveEmotion = 0;
-      emotionEntries.forEach((entry) => {
-        const [emotion, percentage] = entry.split(": ");
-        if (["happy", "surprised"].includes(emotion.toLowerCase())) {
-          positiveEmotion += parseFloat(percentage) / 100;
-        }
-      });
+    const emotionEntries = this.emotion.split(", ");
+    let positiveEmotion = 0, negativeEmotion = 0;
+    emotionEntries.forEach((entry) => {
+      const [emotion, percentage] = entry.split(": ");
+      const value = parseFloat(percentage) / 100;
+      if (["happy", "surprised"].includes(emotion.toLowerCase())) {
+        positiveEmotion += value;
+      } else if (["angry", "sad"].includes(emotion.toLowerCase())) {
+        negativeEmotion += value;
+      }
+    });
 
-      return positiveEmotion / emotionEntries.length;
-    },
+    return {
+      positive: positiveEmotion,
+      negative: negativeEmotion,
+    };
+  }
+
   },
 };
 </script>
