@@ -2,59 +2,60 @@
 .screen {
   display: flex;
   justify-content: space-between;
-  gap: 2rem; /* 컴포넌트 간격 */
-  height: 100vh; /* 화면 전체 높이를 채움 */
-  margin: 0; /* 외부 여백 제거 */
-  padding: 1rem; /* 내부 패딩 추가 */
-  box-sizing: border-box; /* 패딩 포함 계산 */
-  overflow: hidden; /* 스크롤 제거 */
+  gap: 2rem;
+  height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  
 }
 
 /* Left Side ================================================ */
 .left-side {
-  width: 20%; /* 더 적절한 비율 */
+  width: 20%;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 1.5rem;
-  background-color: #ffffff; /* 배경색 추가 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 카드 스타일 */
-  height: calc(100vh - 8rem); /* 화면 높이에서 상하 패딩 보정 */
-  overflow-y: auto; /* 필요한 경우 내부 스크롤 */
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 8rem);
+  overflow-y: auto;
 }
 
+/* Upload Box */
 .upload-box {
-  border: 2px dashed #007bff; /* 기본 색상 */
+  border: 2px dashed #007bff;
   border-radius: 10px;
   padding: 1.5rem;
   text-align: center;
   background-color: #f8f9fa;
   color: #6c757d;
-  transition: all 0.3s ease-in-out; /* 부드러운 전환 */
+  transition: all 0.3s ease-in-out;
   position: relative;
-  overflow: hidden; /* 애니메이션이 영역을 넘지 않도록 */
+  overflow: hidden;
 }
 
 .upload-box:hover {
   background-color: #e9ecef;
   border-color: #0056b3;
-  transform: scale(1.02); /* 약간 확대 효과 */
-}
-/* 드래그 상태 애니메이션 */
-.upload-box.drag-active {
-  border-color: #28a745;
-  background-color: #e6ffe6; /* 초록색 강조 */
-  box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
-  animation: pulse 1.5s infinite; /* 맥동 효과 */
+  transform: scale(1.02);
 }
 
+.upload-box.drag-active {
+  border-color: #28a745;
+  background-color: #e6ffe6;
+  box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
+  animation: pulse 1.5s infinite;
+}
 
 .upload-box > span {
   display: block;
-  margin-bottom: 0.5rem; /* 간격 추가 */
+  margin-bottom: 0.5rem;
 }
 
 #upload-icon {
-  width: 30%; /* 아이콘 크기 확대 */
+  width: 30%;
   margin-bottom: 1rem;
 }
 
@@ -63,24 +64,30 @@
   color: #007bff;
   font-weight: 600;
   text-decoration: underline;
-  transition: color 0.3s ease-in-out; /* 색상 변화 */
+  transition: color 0.3s ease-in-out;
 }
 
 .click-upload:hover {
-  color: #0056b3; /* 호버 색상 */
+  color: #0056b3;
 }
 
-.left-side-image-box {
+/* Shared Styles ============================================ */
+.shared-box {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: #adb5bd; /* 더 부드러운 회색 */
+  color: #adb5bd;
   border: 1px solid #e9ecef;
   border-radius: 10px;
   background-color: #f8f9fa;
-  overflow: hidden; /* 이미지가 넘어가지 않도록 */
+  overflow: hidden;
   margin-top: 1rem;
+}
+
+/* Left Side Image Box */
+.left-side-image-box {
+  @extend .shared-box;
 }
 
 .left-side-image-box img {
@@ -97,114 +104,75 @@
   color: #495057;
 }
 
-.option-box input, .option-box select {
+.option-box input,
+.option-box select {
   margin-bottom: 1rem;
   padding: 0.5rem;
   border: 1px solid #ced4da;
   border-radius: 5px;
-  width: 100%; /* 기본 너비를 100%로 */
-  max-width: 200px; /* 최대 너비 제한 */
+  width: 100%;
+  max-width: 200px;
   transition: border-color 0.3s ease-in-out;
 }
 
-.option-box input:focus, .option-box select:focus {
+.option-box input:focus,
+.option-box select:focus {
   border-color: #007bff;
   outline: none;
 }
 
-/* 입력 필드 너비 설정 */
-#role {
-  max-width: 80px; /* select 요소의 너비 조정 */
-}
-
-#gameTime {
-  max-width: 80px; /* % 입력칸 크기 줄임 */
-}
-
-#score, #opponentScore {
-  max-width: 60px; /* 점수 입력칸 크기 */
-}
-
-
 /* Main Section ============================================= */
 .main {
-  width: 65%; /* 더 넓은 비율 */
-  height: calc(100vh - 8rem); /* 화면 높이에서 상하 패딩 보정 */
+  width: 65%;
+  height: calc(100vh - 8rem);
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 1.5rem;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: auto; /* 내부 스크롤 */
+  display: grid; /* Grid 레이아웃 사용 */
+  grid-template-columns: 1fr 1fr; /* 두 열 */
+  grid-template-rows: 1fr 1fr; /* 두 행 */
+  gap: 1rem; /* 그리드 아이템 간의 간격 */
+  overflow-y: auto;
 }
 
+/* Result Section */
 .result-section {
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
+  @extend .shared-box;
   padding: 1.5rem;
-  text-align: center;
-  background-color: #ffffff; /* 카드 배경 */
   color: #6c757d;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 카드 효과 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  grid-column: 1 / 2; /* 첫 번째 열 */
+  grid-row: 1 / 2; /* 첫 번째 행 */
 }
 
-/* 승률 색상 조절 (기본 설정) */
+/* Win Probability */
 .win-probability {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
 .win-probability.green {
-  color: #28a745; /* 초록색 */
+  color: #28a745;
 }
 
 .win-probability.red {
-  color: #dc3545; /* 붉은색 */
+  color: #dc3545;
 }
 
-/* 경기 진행 내역 박스 크기 조정 */
+/* History Section ========================================== */
 .history-section {
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 1.5rem;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 8rem); /* 화면 높이에서 상하 패딩 보정 */
-  overflow-y: auto; /* 내부 스크롤 */
-}
-/* Analyze 버튼 스타일 */
-button {
-  background-color: #007bff; /* 기본 파란색 배경 */
-  color: #ffffff; /* 흰색 텍스트 */
-  border: none;
-  border-radius: 5px; /* 약간 둥근 모서리 */
-  padding: 10px 20px; /* 버튼 내부 여백 */
-  font-size: 1rem; /* 텍스트 크기 */
-  font-weight: bold; /* 굵은 텍스트 */
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-  transition: all 0.3s ease; /* 부드러운 전환 */
-  margin-top: 1rem; /* 위 요소와 간격 */
-  display: block; /* 버튼을 중앙 정렬 가능하도록 블록 요소 */
-  text-align: center; /* 텍스트 중앙 정렬 */
+  height: calc(100vh - 8rem);
+  overflow-y: auto;
 }
 
-button:hover {
-  background-color: #0056b3; /* 호버 시 더 어두운 파란색 */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 증가 */
-  transform: translateY(-2px); /* 약간 위로 올라감 */
-}
-
-button:active {
-  background-color: #003f7f; /* 클릭 시 더 어두운 색 */
-  transform: translateY(0); /* 클릭 시 원래 위치로 */
-}
-
-/* Analyze 버튼을 옵션 박스 아래 정렬 */
-.option-box {
-  text-align: center; /* 옵션 박스 내 버튼 중앙 정렬 */
-}
-
+/* Scrollbar Styles */
 .history-section::-webkit-scrollbar {
   width: 8px;
 }
@@ -214,140 +182,108 @@ button:active {
   border-radius: 10px;
 }
 
+/* Analyze Button =========================================== */
+button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  display: block;
+  text-align: center;
+}
 
+button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+button:active {
+  background-color: #003f7f;
+  transform: translateY(0);
+}
+
+/* Analyze Section ========================================== */
 .analyze-section {
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 1.5rem;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex; /* 플렉스 컨테이너로 설정 */
-  flex-direction: row; /* 가로 정렬 */
-  justify-content: space-between; /* 좌우 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  gap: 1rem; /* 요소 간 간격 추가 */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
-.main-section-image-box,
-.analysis-box {
-  flex: 1; /* 각 요소가 균등한 크기를 차지 */
-  text-align: center;
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 1rem;
+/* Shared Box Styles */
+.result-section {
+  @extend .shared-box;
+  padding: 1.5rem;
+  color: #6c757d;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  grid-column: 1 / 2; /* 첫 번째 열 */
+  grid-row: 1 / 2; /* 첫 번째 행 */
 }
-/* 이미지 스타일 */
+
+/* 이미지 미리보기 */
+.main-section-image-box {
+  @extend .shared-box;
+  flex: 1;
+  padding: 1rem;
+  grid-column: 2 / 3; /* 두 번째 열 */
+  grid-row: 1 / 2; /* 첫 번째 행 */
+}
+
+/* 파이 차트 */
+.analysis-box {
+  @extend .shared-box;
+  flex: 1;
+  padding: 1rem;
+  grid-column: 1 / 2; /* 첫 번째 열 */
+  grid-row: 2 / 3; /* 두 번째 행 */
+}
+
+/* 감정 분석 표 */
+.emotion-table-container {
+  @extend .shared-box;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  grid-column: 2 / 3; /* 두 번째 열 */
+  grid-row: 2 / 3; /* 두 번째 행 */
+}
+
+/* Image Styles */
 .main-section-image-box img {
   max-width: 100%;
-  max-height: 300px; /* 크기 제한 */
+  max-height: 300px;
   border-radius: 10px;
 }
+
+/* Chart Styles */
 #myPieChart {
-  width: 100%; /* 가로 너비를 부모에 맞춤 */
-  max-width: 300px; /* 최대 너비 제한 */
-  height: auto; /* 비율 유지 */
-}
-/* 반응형 디자인 ============================================ */
-@media (max-width: 1024px) {
-  /* 중간 화면 (태블릿) */
-  .screen {
-    flex-direction: column; /* 세로 배치 */
-    align-items: center;
-    gap: 1rem;
-    padding: 0 2rem;
-  }
-
-  .left-side, .main, .right-side {
-    width: 90%; /* 넓이를 90%로 조정 */
-    margin-bottom: 1rem; /* 각 섹션 간격 */
-  }
-
-  .option-box input, .option-box select {
-    max-width: 90%; /* 입력 필드 너비 조정 */
-  }
+  width: 1000%;
+  max-width: 500px;
+  height: auto;
 }
 
-@media (max-width: 768px) {
-  /* 작은 화면 (모바일) */
-  .screen {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-
-  .left-side, .main, .history-section {
-    width: 100%; /* 화면 전체 너비로 조정 */
-    padding: 1rem; /* 패딩 조정 */
-  }
-
-  .option-box {
-    display: flex;
-    flex-wrap: wrap; /* 여러 줄로 입력 필드를 나열 */
-    gap: 1rem;
-  }
-
-  .option-box label {
-    flex: 1 0 100%; /* 라벨은 한 줄 전체 */
-  }
-
-  .option-box input, .option-box select {
-    flex: 1 0 calc(50% - 1rem); /* 필드는 반으로 나눔 */
-    max-width: 100%;
-  }
-
-  #gameTime, #score, #opponentScore {
-    flex: 1 0 calc(30% - 1rem); /* 더 작은 필드 */
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(40, 167, 69, 0.7);
-  }
-}
-
-/* 배경의 움직이는 효과 */
-.upload-box::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(0, 123, 255, 0.3), transparent);
-  animation: move-background 3s linear infinite;
-  z-index: -1; /* 배경으로 보이게 */
-}
-
-/* 움직이는 배경 애니메이션 */
-@keyframes move-background {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.5);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-/* 감정 테이블 컨테이너 스타일 */
+/* Emotion Table =========================================== */
 .emotion-table-container {
-  margin-top: 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  background-color: #ffffff;
+  @extend .shared-box;
   padding: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
 }
 
-/* 감정 테이블 스타일 */
 .emotion-table {
   width: 100%;
   border-collapse: collapse;
@@ -355,7 +291,8 @@ button:active {
   font-size: 0.9rem;
 }
 
-.emotion-table th, .emotion-table td {
+.emotion-table th,
+.emotion-table td {
   padding: 0.75rem;
   border: 1px solid #e9ecef;
 }
@@ -370,38 +307,162 @@ button:active {
 .emotion-table td {
   background-color: #f8f9fa;
 }
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .emotion-table th, .emotion-table td {
-    font-size: 0.8rem;
-    padding: 0.5rem;
-  }
-}
-
-
-
-
-/* Right Side ============================================== */
-/* .right-side {
-  width: 20%; /* 더 적절한 비율 */
-  /*border: 1px solid #e0e0e0;
+/* Main Section ============================================= */
+.main {
+  width: 65%;
+  height: calc(100vh - 8rem);
+  border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 1.5rem;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-} */
-/* 
-.history-section {
-  overflow-y: auto; /* 스크롤 가능 */
-  /*max-height: 400px;
+  display: grid; /* Grid 레이아웃 사용 */
+  grid-template-columns: 1fr 1fr; /* 두 열 */
+  grid-template-rows: 1fr 1fr; /* 두 행 */
+  gap: 1rem; /* 그리드 아이템 간 간격 */
+  overflow-y: auto;
 }
 
-.history-section::-webkit-scrollbar {
-  width: 8px;
-}
-
-.history-section::-webkit-scrollbar-thumb {
-  background-color: #007bff;
+/* 승률 섹션 */
+.result-section {
+  grid-column: 1 / 2; /* 첫 번째 열 */
+  grid-row: 1 / 2; /* 첫 번째 행 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
   border-radius: 10px;
-} */
+}
+
+/* 이미지 미리보기 */
+.main-section-image-box {
+  grid-column: 1 / 2; /* 첫 번째 열 */
+  grid-row: 2 / 3; /* 두 번째 행 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+}
+
+/* 파이 차트 */
+.analysis-box {
+  grid-column: 2 / 3; /* 두 번째 열 */
+  grid-row: 1 / 2; /* 첫 번째 행 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  
+}
+
+/* 감정 분석 표 */
+.emotion-table-container {
+  grid-column: 2 / 3; /* 두 번째 열 */
+  grid-row: 2 / 3; /* 두 번째 행 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+
+
+
+/* Responsive Design ======================================= */
+@media (max-width: 1024px) {
+  .main {
+    grid-template-columns: 1fr; /* 한 열 */
+    grid-template-rows: repeat(4, auto); /* 4개의 행 */
+  }
+
+  .result-section,
+  .main-section-image-box,
+  .analysis-box,
+  .emotion-table-container {
+    grid-column: 1 / 2; /* 모든 아이템이 한 열로 배치 */
+    grid-row: auto; /* 행 자동 배치 */
+  }
+}
+
+@media (max-width: 768px) {
+  .screen {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .left-side,
+  .main,
+  .history-section {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .option-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .option-box label {
+    flex: 1 0 100%;
+  }
+
+  .option-box input,
+  .option-box select {
+    flex: 1 0 calc(50% - 1rem);
+    max-width: 100%;
+  }
+
+  #gameTime,
+  #score,
+  #opponentScore {
+    flex: 1 0 calc(30% - 1rem);
+  }
+}
+
+/* Animations ============================================== */
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(40, 167, 69, 0.7);
+  }
+}
+
+.upload-box::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 123, 255, 0.3), transparent);
+  animation: move-background 3s linear infinite;
+  z-index: -1;
+}
+
+@keyframes move-background {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
