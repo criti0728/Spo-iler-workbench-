@@ -69,6 +69,7 @@
 
       <!-- 감정 분석 표 -->
       <div class="emotion-table-container">
+        <p v-show='!showInMainSection'>The analysis results will be displayed here.</p>
         <table class="emotion-table" v-if="emotionTableData.length > 0">
           <thead>
             <tr>
