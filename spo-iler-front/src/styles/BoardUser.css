@@ -518,7 +518,7 @@ button:active {
   .emotion-table-container {
     width: 100%;
     padding: 1rem;
-    font-size: 0.9rem;
+    /* font-size: 0.9rem; */
     height: auto; /* 높이 자동 */
   }
 
