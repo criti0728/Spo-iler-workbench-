@@ -1,7 +1,8 @@
 [구글독스](https://docs.google.com/document/d/1SGMtZOGRSk42DyslsK9BDZlZRZfsByDZmD9C12JSYds/edit?usp=sharing)
 [피그마](https://www.figma.com/design/73VSLdfkhjtWZpaeU1hbZm/%EC%8A%B9%EB%B6%80%EC%98%88%EC%B8%A1?node-id=0-1&t=4Yoyy4iRh3Dn3wLv-1)
 [노션](https://www.notion.so/PJT-B-11b943c01a2e80f6ade6db84130922d3)
-![komi](https://github.com/user-attachments/assets/4b2c4cd1-8995-46fd-b4ed-bd92b16cf3bd)
+![komi](https://github.com/user-attachments/assets/d328bfd6-3cc9-4c8f-b8e5-e19d8d802a0d)
+
 # **Spo-iler 프로젝트 보고서**
 
 ## **1. 기획 배경 및 목적**
