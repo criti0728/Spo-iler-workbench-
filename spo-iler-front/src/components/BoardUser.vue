@@ -2,13 +2,12 @@
   <div class="screen">
     <!-- 왼쪽 사이드바 -->
     <div class="left-side">
-      <!-- 업로드 섹션 -->
       <div class="upload-section">
         <!-- 사진 업로드 -->
         <div class="upload-box"
-        @dragover.prevent="handleDragOver"
-        @dragleave.prevent="handleDragLeave"
-        @drop.prevent="handleDrop"
+          @dragover.prevent="handleDragOver"
+          @dragleave.prevent="handleDragLeave"
+          @drop.prevent="handleDrop"
         >
           <img id="upload-icon" src="../assets/upload-icon.png" alt="">
           <span v-if="!isDragging" id="dropFilesHere">Drop files here</span>
@@ -16,57 +15,32 @@
           <p v-if="!isDragging" class="click-upload" @click.prevent="uploadByClick">Click here</p>
           <p v-if="isDragging" class="dragging-text">Release to Upload</p>
           <span>ONLY IMAGE files available</span>
-          <input type="file" @change="handleImageUpload" accept="image/*" hidden ref="fileInput"/>
+          <input type="file" @change="handleImageUpload" accept="image/*" hidden ref="fileInput" />
         </div>
-
-        <!-- 업로드 이미지 미리보기 -->
         <div class="left-side-image-box">
           <div v-show="showInUploadSection">
-            <img class="left-side-image" :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
+            <img class="left-side-image" :src="imageUrl" alt="Uploaded Image" />
           </div>
           <p v-show="!showInUploadSection">The image will be displayed here.</p>
         </div>
-
-        <!-- 옵션 선택 영역 -->
         <div class="option-box">
-          <!-- 선수/감독 선택 -->
           <label for="role">Role</label>
           <select v-model="role" id="role">
             <option value="player">Player</option>
             <option value="coach">Coach</option>
           </select>
-
-          <!-- 경기 진행 시간 선택 -->
-          <label for="gameTime">Game Time(%)</label>
+          <label for="gameTime">Game Time (%)</label>
           <input type="number" v-model="gameTime" id="gameTime" min="0" max="100" /> %
-          
-          <!-- 현재 스코어 선택 -->
           <label for="score">Current Score</label>
-          <label for="score">My Team : Opponent</label>
           <input type="number" v-model="score" id="score" /> : <input type="number" v-model="opponentScore" id="opponentScore" />
-          
-          <!-- Run 버튼 -->
           <button @click.prevent="runAnalyze">Analyze</button>
         </div>
-        
-
-        <!-- 사진 업로드 섹션 ->로컬스토리지 관련으로 문제 생길 시 복구하기
-        <div>            
-          <h4>Upload a photo to detect emotions:</h4>
-          <input type="file" @change="handleImageUpload" accept="image/*" />
-        </div> -->
-
-        <!-- 업로드된 이미지 미리보기 ->로컬스토리지 관련으로 문제 생길 시 복구하기
-        <div v-if="imageUrl">
-          <h4>Uploaded Image:</h4>
-          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%; height: auto;" />
-        </div> -->
       </div>
     </div>
 
     <!-- 메인 섹션 -->
     <div class="main">
-      <!-- 결과 섹션 -->
+      <!-- 승률 섹션 -->
       <div class="result-section">
         <div v-if="showInMainSection && winProbability !== null">
           <h4 :class="['win-probability', winProbability > 50 ? 'green' : 'red']">
@@ -78,74 +52,52 @@
         </p>
       </div>
 
+      <!-- 이미지 미리보기 -->
+      <div class="main-section-image-box">
+        <div v-show="showInMainSection">
+          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;"/>
+        </div>
+        <p v-show='!showInMainSection'>The image will be displayed here.</p>
+      </div>
 
-      <!-- 분석 섹션 -->
-      <div class="analyze-section">
-        <!-- 이미지 미리보기 -->
-        <div class="main-section-image-box">
-          <div v-show="showInMainSection">
-            <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
-          </div>
-          <p v-show='!showInMainSection'>The image will be displayed here.</p>
-          <div class="emotion-table-container" v-if="emotionTableData.length > 0">
-              <table class="emotion-table">
-                <thead>
-                  <tr>
-                    <th>Emotion</th>
-                    <th>Percentage</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(data, index) in emotionTableData" :key="index">
-                    <td>{{ data.emotion }}</td>
-                    <td>{{ data.percentage }}%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-        </div>
-        <!-- 감정 분석 결과 표시 -->
-        <div class="analysis-box">
-          <div v-show="showInMainSection">
-            <!-- 감정 분석 결과 -->
-            <h4>Emotion Analysis</h4>
-            
-            <!-- 감정 분석 결과 테이블 -->
-            <!-- <div class="emotion-table-container" v-if="emotionTableData.length > 0">
-              <table class="emotion-table">
-                <thead>
-                  <tr>
-                    <th>Emotion</th>
-                    <th>Percentage</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(data, index) in emotionTableData" :key="index">
-                    <td>{{ data.emotion }}</td>
-                    <td>{{ data.percentage }}%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div> -->
-            <!-- 파이차트 -->
-            <canvas id="myPieChart" width="400" height="400"></canvas>
-          </div>
-          <p v-show='!showInMainSection'>The analysis results will be displayed here.</p>
-        </div>
+      <!--파이 차트-->
+      <div class="analysis-box">
+        <p v-show='!showInMainSection'>The analysis results will be displayed here.</p>
+        <canvas v-show='showInMainSection' id="myPieChart"></canvas>
+        
+      </div>
+
+      <!-- 감정 분석 표 -->
+      <div class="emotion-table-container">
+        <table class="emotion-table" v-if="emotionTableData.length > 0">
+          <thead>
+            <tr>
+              <th>Emotion</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(data, index) in emotionTableData" :key="index">
+              <td>{{ data.emotion }}</td>
+              <td>{{ data.percentage }}%</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
+    <!-- 오른쪽 히스토리 -->
     <div class="right-side">
-      <!-- 히스토리 섹션 -->
       <div class="history-section">
         <ActivityLogs :logs="logs" />
       </div>
     </div>
-    
-    <!-- 숨겨진 캔버스 (face-api.js에서 필요) -->
+
+    <!-- 숨겨진 캔버스 -->
     <canvas ref="canvas" style="display: none;"></canvas>
   </div>
 </template>
+
 
 <script>
 import * as faceapi from "face-api.js"; // face-api.js 가져오기
@@ -383,18 +335,19 @@ export default {
             hoverBorderColor: 'rgba(255, 255, 255, 1)',
           }]
         },
-        // options: {
-        //   responsive: true,
-        //   plugins: {
-        //     legend: {
-        //       display: false,
-        //       position: 'left',
-        //     },
-        //     tooltip: {
-        //       enabled: true
-        //     }
-        //   }
-        // }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // 캔버스 비율 유지 해제
+          plugins: {
+            legend: {
+              display: false,
+              position: 'left',
+            },
+            tooltip: {
+              enabled: true
+            }
+          }
+        }
       });
     },
 
