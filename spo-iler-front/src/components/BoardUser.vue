@@ -56,9 +56,9 @@
             Estimated Winning Probability: {{ winProbability.toFixed(2) }}%
           </h4>
         </div>
-        <p v-if="!showInMainSection">
+        <span v-if="!showInMainSection">
           The predicted win rate will be displayed here.
-        </p>
+        </span>
       </div>
 
       <!-- 이미지 미리보기 -->
@@ -66,19 +66,19 @@
         <div v-show="showInMainSection">
           <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;"/>
         </div>
-        <p v-show='!showInMainSection'>The image will be displayed here.</p>
+        <span v-show='!showInMainSection'>The image will be displayed here.</span>
       </div>
 
       <!--파이 차트-->
       <div class="analysis-box">
-        <p v-show='!showInMainSection'>The analysis results will be displayed here.</p>
+        <span v-show='!showInMainSection'>The analysis results will be displayed here.</span>
         <canvas v-show='showInMainSection' id="myPieChart"></canvas>
         
       </div>
 
       <!-- 감정 분석 표 -->
       <div class="emotion-table-container">
-        <p v-show='!showInMainSection'>The analysis results will be displayed here.</p>
+        <span v-show='!showInMainSection'>The analysis results will be displayed here.</span>
         <table class="emotion-table" v-if="emotionTableData.length > 0">
           <thead>
             <tr>
