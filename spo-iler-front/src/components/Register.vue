@@ -135,6 +135,10 @@ export default {
 </script>
 
 <style scoped>
+*{
+  font-family: 'Poppins', sans-serif;
+}
+
 label {
   display: block;
   margin-top: 10px;
@@ -142,32 +146,34 @@ label {
 
 .card-container.card {
   max-width: 350px !important;
-  padding: 40px 40px;
+  padding: 0px 40px;
 }
 
 .card {
-  background-color: #f7f7f7;
+  background-color: #f0fcff;
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
   margin-top: 50px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  border-radius: 2px;
   -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  border: 1px solid #dfe8eb;
+  border-radius: 10px;
 }
 
 .logo-img-card {
-  height: 60px;
+  height: 50px;
   margin: 0 auto 10px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
   display: block;
 }
 
 .error-feedback {
   color: red;
+  font-size: small;
 }
 
 .info-text-main {
@@ -178,15 +184,22 @@ label {
 
 .info-text-sub {
   text-align: center;
+  margin-bottom: 2rem;
+  font-size: small;
 }
 
 .icon {
   width: 1.5rem;
   height: 1.5rem;
+  margin-right: 1rem;
 }
 
 .input {
   display: flex;
   align-items: center;
+}
+
+.form-control {
+  font-size: small;
 }
 </style>

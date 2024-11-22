@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header class="jumbotron">
-      <h3>{{ content }}</h3>
+      <h3>Moderator Page</h3>
     </header>
   </div>
 </template>
@@ -33,3 +33,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+*{
+  font-family: 'Poppins', sans-serif;
+}
+
+.jumbotron {
+  background-color: white;
+}
+</style>
