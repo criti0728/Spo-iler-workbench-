@@ -52,7 +52,7 @@
       <div class="col-5">
         <div class="row d-flex">
           <div class="face">
-            <img v-if="log.imageUrl" :src="log.imageUrl" alt="Uploaded Image" style="max-width: 100px;" class="face-img">
+            <img v-if="log.imageUrl" :src="log.imageUrl" alt="Uploaded Image" class="face-img">
           </div>
         </div>
       </div>
@@ -60,11 +60,11 @@
         <div class="row text-right">
           <div class="col-5">
             <h6 class="mob-text">
-              <p v-if="log.winProbability">{{ log.winProbability }}%</p>
+              <span v-if="log.winProbability" :class="[log.winProbability > 50 ? 'green' : 'red']">{{ log.winProbability }}%</span>
             </h6>
           </div>          
           <div class="col-6">
-            <p class="mob-text">{{ formatTimestamp(log.timestamp) }}</p>
+            <span class="mob-text">{{ formatTimestamp(log.timestamp) }}</span>
           </div>
         </div>
       </div>
@@ -127,7 +127,6 @@ export default {
 
 .card{
   border:none;
-  
 }
 
 .fonts{
@@ -172,5 +171,22 @@ export default {
   top: 50%;
   transform: translate(0, -50%);
   position: relative;
+}
+
+.face {
+  height: 100px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.green {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.red {
+  color: #dc3545;
+  font-weight: 600;
 }
 </style>

@@ -1,11 +1,12 @@
 <template>
     <div>
       <h4>History</h4>
-      <p>Reset upon logging out.</p>
+      <p class="reset">Reset upon logging out.</p>
       <div v-for="(log, index) in logs.slice().reverse()" :key="index">
+        <span>{{ formatTimestamp(log.timestamp) }}</span>
+        <p v-if="log.winProbability" :class="[log.winProbability > 50 ? 'green' : 'red']">{{ log.winProbability }}%</p>
         <img v-if="log.imageUrl" :src="log.imageUrl" alt="Uploaded Image" style="max-width: 100px;" />
-        <p v-if="log.winProbability">Win Probability: {{ log.winProbability }}%</p>
-        <p>{{ formatTimestamp(log.timestamp) }}</p>
+        <hr>
       </div>
     </div>
   </template>
@@ -37,6 +38,25 @@
 <style scoped>
 *{
   font-family: 'Poppins', sans-serif;
+}
+
+.reset {
+  font-size: small;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100px;
+}
+
+.green {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.red {
+  color: #dc3545;
+  font-weight: 600;
 }
 
 </style>
