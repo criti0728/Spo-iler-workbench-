@@ -11,9 +11,9 @@
         >
           <img id="upload-icon" src="../assets/upload-icon.png" alt="">
           <span v-if="!isDragging" id="dropFilesHere">Drop files here</span>
-          <span v-if="!isDragging">OR</span>
-          <p v-if="!isDragging" class="click-upload" @click.prevent="uploadByClick">Click here</p>
           <p v-if="isDragging" class="dragging-text">Release to Upload</p>
+          <span>OR</span>
+          <p class="click-upload" @click.prevent="uploadByClick">Click here</p>
           <span>ONLY IMAGE files available</span>
           <input type="file" @change="handleImageUpload" accept="image/*" hidden ref="fileInput" />
         </div>
@@ -21,18 +21,27 @@
           <div v-show="showInUploadSection">
             <img class="left-side-image" :src="imageUrl" alt="Uploaded Image" />
           </div>
-          <p v-show="!showInUploadSection">The image will be displayed here.</p>
+          <span v-show="!showInUploadSection">The image will be displayed here.</span>
         </div>
         <div class="option-box">
           <label for="role">Role</label>
-          <select v-model="role" id="role">
-            <option value="player">Player</option>
-            <option value="coach">Coach</option>
-          </select>
+          <div class="options">
+            <select v-model="role" id="role">
+              <option value="player">Player</option>
+              <option value="coach">Coach</option>
+            </select>
+          </div>
           <label for="gameTime">Game Time (%)</label>
-          <input type="number" v-model="gameTime" id="gameTime" min="0" max="100" /> %
+          <div class="options">
+            <input type="number" v-model="gameTime" id="gameTime" min="0" max="100" />
+            <span id="percent">%</span>
+          </div>
           <label for="score">Current Score</label>
-          <input type="number" v-model="score" id="score" /> : <input type="number" v-model="opponentScore" id="opponentScore" />
+          <div class="options">
+            <input type="number" v-model="score" id="score" />
+            <span id="versus">:</span>
+            <input type="number" v-model="opponentScore" id="opponentScore" />
+          </div>
           <button @click.prevent="runAnalyze">Analyze</button>
         </div>
       </div>
