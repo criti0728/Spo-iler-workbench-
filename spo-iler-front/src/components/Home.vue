@@ -29,6 +29,9 @@
       <router-link to="/profile" class="nav-link">
         <button type="button" class="btn btn-primary">My Page</button>
       </router-link>
+      <a href="https://github.com/pasongvan/Spo-iler/blob/main/README.md" class="nav-link" target="_blank" rel="noopener noreferrer">
+      <button type="button" class="btn btn-primary">App Info</button>
+    </a>
     </div>
   </div>
 </template>
@@ -111,6 +114,7 @@ video {
 }
 .information {
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .buttons {
