@@ -87,11 +87,46 @@
             <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;" />
           </div>
           <p v-show='!showInMainSection'>The image will be displayed here.</p>
+          <div class="emotion-table-container" v-if="emotionTableData.length > 0">
+              <table class="emotion-table">
+                <thead>
+                  <tr>
+                    <th>Emotion</th>
+                    <th>Percentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(data, index) in emotionTableData" :key="index">
+                    <td>{{ data.emotion }}</td>
+                    <td>{{ data.percentage }}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </div>
         <!-- 감정 분석 결과 표시 -->
         <div class="analysis-box">
-          <div v-show='showInMainSection'>
-            <h4>{{ emotion }}</h4>
+          <div v-show="showInMainSection">
+            <!-- 감정 분석 결과 -->
+            <h4>Emotion Analysis</h4>
+            
+            <!-- 감정 분석 결과 테이블 -->
+            <!-- <div class="emotion-table-container" v-if="emotionTableData.length > 0">
+              <table class="emotion-table">
+                <thead>
+                  <tr>
+                    <th>Emotion</th>
+                    <th>Percentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(data, index) in emotionTableData" :key="index">
+                    <td>{{ data.emotion }}</td>
+                    <td>{{ data.percentage }}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> -->
             <!-- 파이차트 -->
             <canvas id="myPieChart" width="400" height="400"></canvas>
           </div>
@@ -141,6 +176,8 @@ export default {
       showInMainSection: false,
       pieChart: null,
       logs: [],
+      emotionTableData: [], // 감정 분석 결과를 담을 데이터
+      
     };
   },
   mounted() {
@@ -231,7 +268,7 @@ export default {
       // 이미지 임시 저장
       this.imageFile = file;
     },
-
+    
     // 업로드된 이미지 분석 메서드
     async runAnalyze() {
       const file = this.imageFile;
@@ -306,8 +343,9 @@ export default {
       this.showInUploadSection = false;
 
       this.logs = getFromLocalStorage("userLogs");
+      this.parseEmotionToTable();
     },
-
+    
     // 파이차트 생성 메서드
     createPieChart(labels, data) {
       if (this.pieChart) {
@@ -369,7 +407,17 @@ export default {
         img.onerror = (err) => reject(err);
       });
     },
-
+    parseEmotionToTable() {
+      if (this.emotion) {
+        const emotionEntries = this.emotion.split(", ");
+        this.emotionTableData = emotionEntries.map((entry) => {
+          const [emotion, percentage] = entry.split(": ");
+          return { emotion: emotion.trim(), percentage: parseFloat(percentage) };
+        });
+      } else {
+        this.emotionTableData = [];
+      }
+    },
     // 승률 계산 메서드
     calculateWinProbability() {
       let probability = 50; // 기본 승률 50%
