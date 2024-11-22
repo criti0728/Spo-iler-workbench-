@@ -15,14 +15,17 @@
               <p class="fonts">{{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}</p>
             </div>
             <div class="buttons">
-                <button class="btn btn-outline-primary px-4"><router-link to="/user" class="nav-link">Start</router-link></button>
-                <button class="btn btn-primary px-4 ms-3"><a id="logout" class="nav-link" @click.prevent="logOut">LogOut</a></button>
+              <button type="button" class="btn btn-primary"><router-link to="/user" class="nav-link">Start</router-link></button>
+              <button type="button" class="btn btn-primary"><a id="logout" class="nav-link" @click.prevent="logOut">LogOut</a></button>
+
+              <!-- <button class="btn btn-outline-primary px-4"><router-link to="/user" class="nav-link">Start</router-link></button>
+              <button class="btn btn-primary px-4 ms-3"><a id="logout" class="nav-link" @click.prevent="logOut">LogOut</a></button> -->
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
   <!-- 분석 히스토리 -->
@@ -112,6 +115,10 @@ export default {
 </script>
 
 <style scoped>
+*{
+  font-family: 'Poppins', sans-serif;
+}
+
 .border-top {
   border-top: 1px solid #EEEEEE !important;
   margin-top: 20px;
@@ -123,65 +130,32 @@ export default {
   
 }
 
-.card:before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  border-width: 4px;
-  border-color: lightgray;
-  border-style: solid;
-  border-radius: 8px;
-}
-
-.card:after{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  border-width: 4px;
-  border-color: black;
-  border-style: solid;
-  border-radius: 8px;
-  transform:scale(0, 0);
-  transition:all 0.3s;
-  transform-origin: top, left;
-}
-
-.card:hover::after{
-  transform:scale(1, 1);
-}
-
 .fonts{
   font-size:10px;
 }
 
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
 .buttons button:nth-child(1){
-  position: relative;
-  border:1px solid #3030ff !important;
+  margin-left: 1rem;
+  margin-right: 1rem;
   color:#ffffff;
   height:40px;
-  background-color: #3030ff;
+  width: 120px;
   z-index: 1;
 }
 
-.buttons button:nth-child(1):hover{
-  border:1px solid #0000ff !important;
-  color:#fff;
-  height:40px;
-  background-color:#0000ff;
-}
-
 .buttons button:nth-child(2){
-  position: relative;
+  margin-left: 1rem;
+  margin-right: 1rem;
   border:1px solid #a0a0a0 !important;
   background-color:#fff;
   color:#000000;
   height:40px;
+  width: 120px;
   z-index: 1;
 }
 

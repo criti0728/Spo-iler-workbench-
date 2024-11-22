@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav>
+    <nav v-if="showNav">
       <div class="wrapper">
         <a href="/">
           <img class="logo" src="./assets/new-logo.png" alt="">
@@ -12,13 +12,13 @@
               <router-link to="/home">Home</router-link>
             </li>
             <li v-if="showAdminBoard">
-              <router-link to="/admin">Admin Board</router-link>
+              <router-link to="/admin">Admin</router-link>
             </li>
             <li v-if="showModeratorBoard">
-              <router-link to="/mod">Moderator Board</router-link>
+              <router-link to="/mod">Moderator</router-link>
             </li>
             <li>
-              <router-link v-if="currentUser" to="/user">User</router-link>
+              <router-link v-if="currentUser" to="/user">Analyze</router-link>
             </li>
           </ul>
         </div>
@@ -64,6 +64,12 @@
 <script>
 export default {
   computed: {
+    currentRoute() {
+      return this.$route.path; // 현재 경로 반환
+    },
+    showNav() {
+      return (this.$route.path !== '/') && (this.$route.path !== '/home')
+    },
     currentUser() {
       return this.$store.state.auth.user;
     },
@@ -94,6 +100,9 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  font-family: 'Poppins', sans-serif;
+}
 
 .logo {
   height: 3.5rem;
