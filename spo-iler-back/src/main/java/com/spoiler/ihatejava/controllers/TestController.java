@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
   @GetMapping("/all")
   public String allAccess() {
-    return "spo-iler에 오신걸 환영합니다 이 프로젝트는 박서하 피승빈의 1학기 최종 프로젝트로 생각보다 별거 없습니다";
+    return "spo-iler에 오신걸 환영합니다 이 프로젝트는 박서하 피승빈의 1학기 최종 프로젝트입니다";
   }
 
   @GetMapping("/user")
@@ -24,12 +24,12 @@ public class TestController {
   @GetMapping("/mod")
   @PreAuthorize("hasRole('MODERATOR')")
   public String moderatorAccess() {
-    return "관리자나리 날 두고 어디간 것이오.";
+    return "당신이 mod인가요.";
   }
 
   @GetMapping("/admin")
   @PreAuthorize("hasRole('ADMIN')")
   public String adminAccess() {
-    return "피 승 빈";
+    return "admin만 볼 수 있는 페이지입니다";
   }
 }
