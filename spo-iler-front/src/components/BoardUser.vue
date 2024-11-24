@@ -62,12 +62,17 @@
       </div>
 
       <!-- 이미지 미리보기 -->
-      <div class="main-section-image-box">
+      <div class="main-section-image-box" ref="imageContainer" style="position: relative; display: inline-block;">
         <div v-show="showInMainSection">
-          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%;"/>
+          <!-- 이미지 -->
+          <img :src="imageUrl" alt="Uploaded Image" style="max-width: 100%; display: block;" />
+          <!-- 캔버스 -->
+          <canvas ref="canvas" style="position: absolute; top: 0; left: 0; pointer-events: none;"></canvas>
         </div>
-        <span v-show='!showInMainSection'>The image will be displayed here.</span>
+        <span v-show="!showInMainSection">The image will be displayed here.</span>
       </div>
+
+
 
       <!--파이 차트-->
       <div class="analysis-box">
@@ -103,8 +108,6 @@
       </div>
     </div>
 
-    <!-- 숨겨진 캔버스 -->
-    <canvas ref="canvas" style="display: none;"></canvas>
   </div>
 </template>
 
@@ -233,80 +236,104 @@ export default {
     
     // 업로드된 이미지 분석 메서드
     async runAnalyze() {
-      const file = this.imageFile;
+        const file = this.imageFile;
 
-      // 이미지 로드
-      const image = await this.loadImage(file);
-      if (!image) {
-        this.emotion = "Failed to load image.";
-        return;
-      }
-
-      // 캔버스 설정: 캔버스를 이미지 크기에 맞추기
-      const canvas = this.$refs.canvas;
-      faceapi.matchDimensions(canvas, image);  // 캔버스를 이미지 크기와 맞춤
-
-      const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.5 });
-
-
-      // 얼굴 감지 및 감정 분석
-      const detections = await faceapi.detectAllFaces(image, options).withFaceExpressions();
-      console.log("Detections:", detections); // 디버깅: 감지 결과 출력
-
-      if (detections.length > 0) {
-        const expressions = detections[0].expressions;
-        console.log("Expressions:", expressions); // 디버깅: 감정 데이터 출력
-
-        if (expressions) {
-          // 감정을 배열로 변환하고 내림차순으로 정렬
-          const sortedEmotions = Object.entries(expressions)
-            .sort(([, valueA], [, valueB]) => valueB - valueA) // 확률값 기준 정렬
-            .slice(0, 4); // 상위 3개 추출
-
-          // 상위 3개의 감정을 문자열로 변환
-          this.emotion = sortedEmotions
-            .map(([emotion, value]) => `${emotion}: ${(value * 100).toFixed(2)}%`)
-            .join(", ");
-
-          console.log("Top 3 emotions:", this.emotion); // 디버깅: 상위 3개 감정
-
-          // 파이차트 생성 메서드 호출
-          const labels = Object.keys(expressions);
-          const data = Object.values(expressions).map(value => value * 100);
-          this.createPieChart(labels, data);
-
-        } else {
-          this.emotion = "No emotions detected.";
+        // 1. 이미지 로드
+        const image = await this.loadImage(file);
+        if (!image) {
+            this.emotion = "Failed to load image.";
+            return;
         }
 
-      } else {
-        this.emotion = "No faces detected.";
-      }
+        // 2. 캔버스와 이미지 컨테이너 설정
+        const canvas = this.$refs.canvas;
+        const container = this.$refs.canvasContainer || this.$refs.imageContainer;
 
-      // 승률 계산
-      this.calculateWinProbability();
-      try {
-        // 이미지 압축
-        const compressedFile = await compressImage(file);
-        this.imageUrl = URL.createObjectURL(compressedFile);
+        if (!container) {
+            console.error("Image container not found.");
+            return;
+        }
 
-        // 로컬스토리지에 저장
-        saveToLocalStorage("userLogs", {
-          timestamp: new Date().toISOString(),
-          winProbability: this.winProbability.toFixed(2),
-          imageUrl: this.imageUrl,
-        });
-      } catch (error) {
-        console.error("Failed to process the image", error);
-      }
-      // 메인 섹션에 이미지 미리보기 표시
-      this.showInMainSection = true;
-      // 업로드 섹션에서 미리보기 제거
-      this.showInUploadSection = false;
+        // 컨테이너 스타일 설정
+        container.style.position = "relative";
 
-      this.logs = getFromLocalStorage("userLogs");
-      this.parseEmotionToTable();
+        // 3. 캔버스 크기 설정
+        const displaySize = { width: image.width, height: image.height };
+        faceapi.matchDimensions(canvas, displaySize);
+
+
+        // 4. 얼굴 감지 및 분석
+        const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.5 });
+        const detections = await faceapi.detectAllFaces(image, options).withFaceExpressions();
+        console.log("Detections:", detections);
+
+        if (detections.length > 0) {
+            // 4.1 얼굴 감지 결과를 캔버스에 표시
+            const resizedDetections = faceapi.resizeResults(detections, displaySize);
+            faceapi.draw.drawDetections(canvas, resizedDetections);
+            faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+
+            // 4.2 평균 감정 계산
+            const totalExpressions = detections.reduce((acc, detection) => {
+                const expressions = detection.expressions;
+                Object.entries(expressions).forEach(([emotion, value]) => {
+                    acc[emotion] = (acc[emotion] || 0) + value;
+                });
+                return acc;
+            }, {});
+
+            const numFaces = detections.length;
+            const averageExpressions = Object.entries(totalExpressions).reduce((acc, [emotion, totalValue]) => {
+                acc[emotion] = totalValue / numFaces;
+                return acc;
+            }, {});
+
+            console.log("Average Expressions:", averageExpressions);
+
+            // 감정 정렬 및 표시
+            const sortedEmotions = Object.entries(averageExpressions)
+                .sort(([, valueA], [, valueB]) => valueB - valueA)
+                .slice(0, 4);
+
+            this.emotion = sortedEmotions
+                .map(([emotion, value]) => `${emotion}: ${(value * 100).toFixed(2)}%`)
+                .join(", ");
+
+            // 파이차트 생성
+            const labels = Object.keys(averageExpressions);
+            const data = Object.values(averageExpressions).map(value => value * 100);
+            this.createPieChart(labels, data);
+        } else {
+            this.emotion = "No faces detected.";
+        }
+
+        // 5. 승률 계산
+        this.calculateWinProbability();
+
+        try {
+            // 이미지 압축 및 로컬스토리지 저장
+            const compressedFile = await compressImage(file);
+            this.imageUrl = URL.createObjectURL(compressedFile);
+
+            saveToLocalStorage("userLogs", {
+                timestamp: new Date().toISOString(),
+                winProbability: this.winProbability.toFixed(2),
+                imageUrl: this.imageUrl,
+            });
+        } catch (error) {
+            console.error("Failed to process the image", error);
+        }
+
+        // 6. 상태 업데이트
+        this.showInMainSection = true;
+        this.showInUploadSection = false;
+
+        // 로컬스토리지에서 로그 가져오기
+        this.logs = getFromLocalStorage("userLogs");
+        this.parseEmotionToTable();
     },
+
+
     
     // 파이차트 생성 메서드
     createPieChart(labels, data) {
@@ -363,12 +390,12 @@ export default {
 
     // 파일에서 이미지를 로드하는 메서드
     loadImage(file) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = () => resolve(img);
-        img.onerror = (err) => reject(err);
-      });
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = () => resolve(img);
+            img.onerror = (err) => reject(err);
+        });
     },
     parseEmotionToTable() {
       if (this.emotion) {
