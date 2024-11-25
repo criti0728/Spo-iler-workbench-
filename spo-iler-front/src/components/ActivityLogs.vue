@@ -1,6 +1,7 @@
 <template>
     <div>
       <h4>History</h4>
+      <!-- {{ logs}} -->
       <p class="reset">Reset upon logging out.</p>
       <div v-for="(log, index) in logs.slice().reverse()" :key="index">
         <span>{{ formatTimestamp(log.timestamp) }}</span>
