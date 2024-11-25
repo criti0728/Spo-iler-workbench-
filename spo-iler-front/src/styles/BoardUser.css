@@ -294,11 +294,16 @@ button:active {
 }
 
 /* Image Styles */
-.main-section-image-box img {
-  max-width: 100%;
-  max-height: 300px;
+/* 이미지 및 캔버스를 화면 크기에 맞게 조정 */
+.main-section-image-box img, 
+.main-section-image-box canvas {
+  width: 100%; /* 부모 박스 너비에 맞춤 */
+  height: auto; /* 비율 유지 */
+  max-height: 400px; /* 최대 높이 제한 */
   border-radius: 10px;
+  object-fit: contain; /* 이미지의 비율을 유지하며 박스에 맞춤 */
 }
+
 
 /* Chart Styles */
 #myPieChart {
@@ -414,6 +419,32 @@ button:active {
   border-radius: 10px;
 }
 
+/* 이미지 미리보기 및 캔버스 스타일 */
+.main-section-image-box img,
+.main-section-image-box canvas {
+  width: 100%; /* 부모 박스 너비에 맞춤 */
+  height: auto; /* 비율 유지 */
+  max-height: 300px; /* 최대 높이 제한 */
+  border-radius: 10px;
+  object-fit: contain; /* 박스 안에 비율 유지하며 조정 */
+}
+.shared-box img,
+.shared-box canvas {
+  display: block;
+  max-width: 100%; /* 부모 요소 너비를 초과하지 않음 */
+  max-height: 100%; /* 부모 요소 높이를 초과하지 않음 */
+  object-fit: contain; /* 내용이 박스 안에 적합하게 배치됨 */
+  margin: auto; /* 요소를 박스 안에서 중앙 정렬 */
+}
+
+/* shared-box 자체 스타일 */
+.shared-box {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 자식 요소가 부모 크기를 초과하면 숨김 */
+}
 
 
 
@@ -430,6 +461,19 @@ button:active {
   .emotion-table-container {
     grid-column: 1 / 2; /* 모든 아이템이 한 열로 배치 */
     grid-row: auto; /* 행 자동 배치 */
+  }
+  .main-section-image-box img,
+  .main-section-image-box canvas {
+    max-width: 100%; /* 부모 요소의 너비에 맞춤 */
+    max-height: 100%; /* 부모 요소의 높이를 초과하지 않음 */
+    object-fit: contain; /* 화면 크기에 맞게 조정 */
+  }
+  .main-section-image-box img,
+  .main-section-image-box canvas {
+    max-width: 80%; /* 부모 요소 크기의 80% */
+    max-height: 80%; /* 부모 요소 크기의 80% */
+    object-fit: contain; /* 이미지 비율 유지 */
+    margin: auto; /* 중앙 정렬 */
   }
 }
 
@@ -458,7 +502,13 @@ button:active {
     padding: 1rem; /* 패딩 조정 */
     margin: 0; /* 외부 여백 제거 */
   }
-
+  /* 이미지 미리보기 박스 */
+  .main-section-image-box {
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+    text-align: center;
+  }
   /* 업로드 박스 */
   .upload-box {
     padding: 1rem; /* 내부 패딩 축소 */
@@ -469,11 +519,11 @@ button:active {
   }
 
   /* 이미지 미리보기 박스 */
-  .left-side-image-box img {
-    max-width: 80%; /* 모바일에서 이미지 크기 조정 */
+  .main-section-image-box img,
+  .main-section-image-box canvas {
+    max-width: 90%; /* 화면 크기에 적응 */
     height: auto; /* 비율 유지 */
     margin: 0 auto; /* 가운데 정렬 */
-
   }
 
   /* 메인 섹션 내부 */
@@ -496,6 +546,7 @@ button:active {
   .main-section-image-box {
     width: 100%;
     padding: 1rem;
+    height: 500px;
     text-align: center;
   }
 
@@ -543,6 +594,48 @@ button:active {
     width: 100%; /* 전체 너비 */
     margin: 0 auto; /* 가운데 정렬 */
   }
+  .main-section-image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 내부 요소가 튀어나오는 것을 방지 */
+    padding: 1rem;
+    width: 100%; /* 부모 크기에 맞게 조정 */
+    height: 500px; /* 높이를 콘텐츠에 맞게 설정 */
+  }
+
+  .main-section-image-box img,
+  .main-section-image-box canvas {
+    /* max-width: 90%; /* 부모 크기의 90%로 제한 */
+    /*max-height: 90%; 부모 크기의 90%로 제한 */
+    object-fit: contain; /* 화면에 맞게 조정 */
+    margin: auto; /* 가운데 정렬 */
+  }
+  .main-section-image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px; /* 높이를 콘텐츠에 맞게 설정 */
+    padding: 1rem; /* 추가 패딩 */
+  }
+
+  .main-section-image-box img,
+  .main-section-image-box canvas {
+    max-width: 100%; /* 부모 요소 너비에 맞춤 */
+    height: 500px; /* 이미지 비율 유지 */
+    max-height: 500px; /* 최대 높이 제한 */
+    object-fit: contain; /* 박스 크기에 맞게 이미지 조정 */
+    margin: auto; /* 이미지 중앙 정렬 */
+  }
+}
+
+/* 이미지가 부모 요소를 넘지 않도록 강제 설정 */
+.main-section-image-box img,
+.main-section-image-box canvas {
+  max-width: 100%; /* 부모 요소 크기를 초과하지 않음 */
+  max-height: 100%; /* 부모 요소 크기를 초과하지 않음 */
+  object-fit: contain; /* 이미지 비율 유지 */
+  margin: auto; /* 중앙 정렬 */
 }
 
 
