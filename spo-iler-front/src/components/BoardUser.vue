@@ -62,7 +62,7 @@
       </div>
 
       <!-- 이미지 미리보기 -->
-      <div class="main-section-image-box" ref="imageContainer" style="position: relative; display: inline-block;">
+      <div class="main-section-image-box" ref="imageContainer" style="position: relative;">
         <div v-show="showInMainSection">
           <!-- 이미지 -->
           <!-- <img :src="finalImage" alt="Uploaded Image" style="max-width: 100%; display: block;" /> -->
@@ -84,7 +84,7 @@
       <!-- 감정 분석 표 -->
       <div class="emotion-table-container">
         <span v-show='!showInMainSection'>The analysis results will be displayed here.</span>
-        <table class="emotion-table" v-if="emotionTableData.length > 0">
+        <table v-show='showInMainSection' class="emotion-table" v-if="emotionTableData.length > 0">
           <thead>
             <tr>
               <th>Emotion</th>
@@ -324,13 +324,14 @@ export default {
             const data = Object.values(averageExpressions).map(value => value * 100);
             this.createPieChart(labels, data);
 
-            // 승률 계산
-            this.calculateWinProbability();
           } else {
             console.log("No faces detected.");
             this.emotionTableData = []; // 감정 분석 결과 초기화
           }
         };
+
+        // 승률 계산
+        this.calculateWinProbability();
 
         img.onerror = (err) => {
           console.error("Failed to load image from imageUrl:", err);
