@@ -343,6 +343,7 @@ button:active {
 .emotion-table td {
   background-color: #f8f9fa;
 }
+
 /* Main Section ============================================= */
 .main {
   width: 65%;
@@ -383,6 +384,7 @@ button:active {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 10px;
+  min-height: 15rem;
 }
 
 /* 파이 차트 */
@@ -417,6 +419,34 @@ button:active {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 10px;
+}
+
+.emotion-table-container tbody tr:nth-child(1) {
+  color: rgb(133, 133, 133);
+}
+
+.emotion-table-container tbody tr:nth-child(2) {
+  color: rgb(255, 183, 0);
+}
+
+.emotion-table-container tbody tr:nth-child(3) {
+  color: rgba(54, 162, 235, 1);
+}
+
+.emotion-table-container tbody tr:nth-child(4) {
+  color: rgba(75, 192, 192, 1);
+}
+
+.emotion-table-container tbody tr:nth-child(5) {
+  color: rgba(153, 102, 255, 1);
+}
+
+.emotion-table-container tbody tr:nth-child(6) {
+  color: rgba(255, 159, 64, 1);
+}
+
+.emotion-table-container tbody tr:nth-child(7) {
+  color: rgba(255, 99, 132, 1);
 }
 
 /* 이미지 미리보기 및 캔버스 스타일 */
