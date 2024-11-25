@@ -53,7 +53,7 @@
         class="alert"
         :class="successful ? 'alert-success' : 'alert-danger'"
       >
-        {{ message }}
+        <span>{{ message }}</span>
       </div>
     </div>
   </div>
@@ -201,5 +201,9 @@ label {
 
 .form-control {
   font-size: small;
+}
+
+.alert-success, alert-danger {
+  text-align: center;
 }
 </style>
