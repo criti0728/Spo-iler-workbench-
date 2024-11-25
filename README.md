@@ -67,4 +67,5 @@
 ---
 
 
-![웹페이지 구성](./mock-up/web_ver1.PNG)
+![image](https://github.com/user-attachments/assets/1004ccb9-04ec-49f4-97c7-ef4bfa5fdfa9)
+
