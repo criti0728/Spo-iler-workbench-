@@ -30,7 +30,10 @@
         <button type="button" class="btn btn-primary">My Page</button>
       </router-link>
       <a href="https://github.com/pasongvan/Spo-iler/blob/main/README.md" class="nav-link" target="_blank" rel="noopener noreferrer">
-      <button type="button" class="btn btn-primary">App Info</button>
+      <button type="button" class="btn btn-primary">
+        <img src="../assets/open_in_new.png" alt="">
+        App Info
+      </button>
     </a>
     </div>
   </div>
@@ -126,5 +129,8 @@ button {
   height: 40px;
   background-color: rgba(0, 0, 255, 0.7);
   border-color: rgba(0, 0, 255, 0.7);
+}
+button img {
+  height: 80%;
 }
 </style>

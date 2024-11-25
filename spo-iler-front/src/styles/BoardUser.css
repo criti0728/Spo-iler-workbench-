@@ -371,6 +371,7 @@ button:active {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 10px;
+  min-height: 15rem;
 }
 
 /* 이미지 미리보기 */
@@ -398,7 +399,7 @@ button:active {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 10px;
-  
+  min-height: 15rem;
 }
 
 /* 감정 분석 표 */
@@ -419,6 +420,7 @@ button:active {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 10px;
+  min-height: 15rem;
 }
 
 .emotion-table-container tbody tr:nth-child(1) {

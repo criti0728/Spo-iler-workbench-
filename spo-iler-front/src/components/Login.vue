@@ -40,7 +40,7 @@
 
         <div class="form-group">
           <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
+            <span>{{ message }}</span>
           </div>
         </div>
       </Form>
@@ -171,5 +171,9 @@ label {
 
 .form-control {
   font-size: small;
+}
+
+.form-group {
+  text-align: center;
 }
 </style>
