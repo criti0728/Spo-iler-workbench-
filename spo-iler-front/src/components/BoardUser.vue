@@ -327,6 +327,8 @@ export default {
           } else {
             console.log("No faces detected.");
             this.emotionTableData = []; // 감정 분석 결과 초기화
+            alert("no face detected.");
+            this.winProbability = 0;
           }
         };
 
