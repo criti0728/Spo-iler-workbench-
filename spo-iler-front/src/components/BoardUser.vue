@@ -127,15 +127,15 @@ export default {
   },
   data() {
     return {
-      content: "",
-      emotion: null,
-      winProbability: null,
-      role: "player",
-      gameTime: 50,
-      score: 0,
-      opponentScore: 0,
-      finalImage: null,
-      isDragging: false,
+      content: "",// 기본 텍스트 콘텐츠
+      emotion: null,// 감정 분석 결과
+      winProbability: null,// 계산된 승리 확률
+      role: "player",// 선수/감독 선택 (기본값: 선수)
+      gameTime: 50,// 경기 진행 시간 (0~100%)
+      score: 0,// 현재 스코어 (팀 점수)
+      opponentScore: 0,// 상대팀 점수
+      finalImage: null,// 이미지 미리보기 URL
+      isDragging: false,// 드래그 상태를 추적
       imageFile: null,
       showInUploadSection: false,
       showInMainSection: false,
@@ -145,7 +145,7 @@ export default {
       averageExpressions: {}, // 감정 분석 결과를 저장
     };
   },
-  mounted() {
+  mounted() {// 사용자 데이터를 가져오기 위한 서비스 호출
     UserService.getUserBoard().then(
       (response) => {
         this.content = response.data;
@@ -159,10 +159,12 @@ export default {
           error.toString();
       }
     );
+    // face-api.js 모델 로드
     this.loadModels();
     this.logs = getFromLocalStorage("userLogs");
   },
   methods: {
+    //emform rhksfus cnrk wprj
     handleDragOver() {
       this.isDragging = true;
       const uploadBox = document.querySelector(".upload-box");
@@ -182,9 +184,13 @@ export default {
         this.handleImageUpload(event);
       }
     },
+
+    //클릭으로 파일 업로드
     uploadByClick() {
       this.$refs.fileInput.click();
     },
+
+    //face api.js 모델 로드 메서드
     async loadModels() {
       try {
         await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
@@ -194,13 +200,19 @@ export default {
         console.error("Error loading models:", err);
       }
     },
+
+    //업로드된 이미지의 처리
     async handleImageUpload(event) {
+      this.logs = getFromLocalStorage("userLogs");
       let file = null;
       try {
         file = event.dataTransfer.files[0];
+        //드래그 드롭
       } catch (error) {
         file = event.target.files[0];
+        //클릭 방식
       }
+      //이미지 파일이 아닌 파일을 업로드 시
       if (!file || !file.type.startsWith("image/")) {
         alert("Only image files are allowed!");
       }
@@ -216,7 +228,7 @@ export default {
     
     async runAnalyze() {
       this.winProbability = null;
-      this.logs = getFromLocalStorage("userLogs");
+      
       const file = this.imageFile;
 
       if (!file) {
@@ -243,10 +255,13 @@ export default {
               const canvas = this.$refs.canvas;
               const ctx = canvas.getContext("2d");
 
+              //캔버스 크기 동기화
               const maxWidth = this.$refs.imageContainer.offsetWidth;
               const aspectRatio = img.naturalWidth / img.naturalHeight;
               canvas.width = maxWidth;
               canvas.height = maxWidth / aspectRatio;
+              console.log(`Canvas resized to: ${canvas.width}x${canvas.height}`);
+
 
               ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
@@ -257,6 +272,13 @@ export default {
               const detections = await faceapi.detectAllFaces(originalImage, options).withFaceExpressions();
 
               if (detections.length > 0) {
+                const displaySize = { width: canvas.width, height: canvas.height };
+                const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
+                // 얼굴 감지 영역 표시
+                faceapi.draw.drawDetections(canvas, resizedDetections);
+                faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+
                 const totalExpressions = detections.reduce((acc, detection) => {
                   Object.entries(detection.expressions).forEach(([emotion, value]) => {
                     acc[emotion] = (acc[emotion] || 0) + value;
@@ -321,7 +343,7 @@ export default {
           this.parseEmotionToTable();
           saveToLocalStorage("userLogs", {
             timestamp: new Date().toISOString(),
-            winProbability: this.winProbability, // 계산이 완료된 후 저장
+            winProbability: this.winProbability.toFixed(2), // 계산이 완료된 후 저장
             imageUrl: this.imageUrl,
           });
           console.log("Final winProbability saved:", this.winProbability);
@@ -390,17 +412,21 @@ export default {
       let probability = 50;
 
       const emotionRatios = this.getPositiveEmotionRatio();
-
+      console.log(emotionRatios.negative)
       if (emotionRatios.negative > 0.8) {
-        probability -= emotionRatios.negative * 8;
+        probability -= emotionRatios.negative * 20;
+        console.log('probability (negative > 0.8) is :'+ probability);
       } else if (emotionRatios.negative > 0.5) {
-        probability -= emotionRatios.negative * 5;
-      }
-
-      if (emotionRatios.positive > 0.8) {
-        probability += emotionRatios.positive * 8;
+        probability -= emotionRatios.negative * 15;
+        console.log('probability (negative > 0.5) is :'+ probability);
       } else if (emotionRatios.positive >= 0.5) {
-        probability += emotionRatios.positive * 5;
+        probability += emotionRatios.positive * 15;
+        console.log('probability (positive >= 0.5) is :'+ probability);
+      } else if (emotionRatios.positive > 0.8) {
+        probability += emotionRatios.positive * 20;
+        console.log('probability (positive > 0.8) is :'+ probability);
+      } else {
+        console.log('No condition met. Current probability is: ' + probability);
       }
 
       const scoreDifference = this.score - this.opponentScore;
